@@ -6,17 +6,17 @@ import argparse
 
 def run_command(cmd):
     """Helper to run a system command and parse JSON output."""
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"Command {' '.join(cmd)} failed with exit code {result.returncode}:")
+        print(result.stderr)
+        raise RuntimeError(result.stderr or f"Exit code {result.returncode}")
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         return json.loads(result.stdout)
-    except subprocess.CalledProcessError as e:
-        print(f"Error executing command {' '.join(cmd)}:")
-        print(e.stderr)
-        sys.exit(1)
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as e:
         print(f"Error parsing JSON output from command {' '.join(cmd)}:")
         print(result.stdout)
-        sys.exit(1)
+        raise e
 
 def main():
     parser = argparse.ArgumentParser(description="UiPath CI/CD Test Cloud & Self-Healing Orchestrator")
