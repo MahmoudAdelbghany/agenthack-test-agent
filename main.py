@@ -3,6 +3,7 @@ import os
 import re
 import subprocess
 import json
+import base64
 import httpx
 from pydantic import BaseModel, Field
 from typing import List, Optional
@@ -154,6 +155,44 @@ async def post_to_slack(channel: str, message: str, attachment: dict = None) -> 
     except Exception as e:
         print(f"[Slack Notification] Warning: failed to post to Slack via Integration Service. Details: {e}")
         return False
+
+# GitHub API Helper to Update a File Remotely
+async def update_github_file(owner: str, repo: str, path: str, content: str, token: str, branch: str = "main") -> bool:
+    headers = {
+        "Authorization": f"token {token}",
+        "Accept": "application/vnd.github.v3+json",
+        "User-Agent": "uipath-self-healing-agent"
+    }
+    url = f"https://api.github.com/repos/{owner}/{repo}/contents/{path}"
+    
+    async with httpx.AsyncClient() as client:
+        # 1. Get the current file SHA
+        res = await client.get(url, headers=headers)
+        if res.status_code != 200:
+            print(f"[GitHub API] Error fetching file info: {res.text}")
+            return False
+            
+        file_info = res.json()
+        sha = file_info.get("sha")
+        
+        # 2. Base64 encode the content
+        encoded_content = base64.b64encode(content.encode("utf-8")).decode("utf-8")
+        
+        # 3. Update the file
+        payload = {
+            "message": "Auto-heal: Fix test failure",
+            "content": encoded_content,
+            "sha": sha,
+            "branch": branch
+        }
+        
+        update_res = await client.put(url, headers=headers, json=payload)
+        if update_res.status_code in [200, 201]:
+            print(f"[GitHub API] Successfully updated {path} on GitHub.")
+            return True
+        else:
+            print(f"[GitHub API] Error updating file on GitHub: {update_res.text}")
+            return False
 
 # LangGraph Node 1: Fetch Failures
 async def fetch_failures(state: GraphState) -> Command:
@@ -370,10 +409,24 @@ async def self_healing(state: GraphState) -> Command:
     current_test = state.failed_tests[state.current_test_index]
     print(f"--- Applying Fix for test: {current_test.test_name} ---")
     
-    # Write the fixed content to the file
+    # Write the fixed content to the file locally
     with open(current_test.file_path, "w") as f:
         f.write(current_test.proposed_fix)
-    print(f"Successfully wrote fix to {current_test.file_path}")
+    print(f"Successfully wrote fix locally to {current_test.file_path}")
+    
+    # Sync fix to GitHub repository if GITHUB_TOKEN environment variable is set
+    github_token = os.getenv("GITHUB_TOKEN")
+    if github_token:
+        print("GITHUB_TOKEN detected. Syncing fix to GitHub repository...")
+        owner = os.getenv("GITHUB_OWNER", "MahmoudAdelbghany")
+        repo = os.getenv("GITHUB_REPO", "agenthack-test-agent")
+        branch = os.getenv("GITHUB_BRANCH", "main")
+        
+        ok = await update_github_file(owner, repo, current_test.file_path, current_test.proposed_fix, github_token, branch)
+        if ok:
+            print("Successfully pushed healed code to GitHub!")
+        else:
+            print("Warning: Failed to sync code to GitHub.")
     
     # Re-run the tests to verify
     print("Verifying the fix by re-running pytest...")
