@@ -1,0 +1,12 @@
+{
+  "runtime": {
+    "internalArguments": {
+      "resourceOverwrites": {
+        "connection.slack-triage": {
+          "connectionId": "804fed11-8981-4c81-bf05-d582e8241dc7",
+          "folderKey": "5afe02d5-5912-4095-a51e-42a34ae7c290"
+        }
+      }
+    }
+  }
+}

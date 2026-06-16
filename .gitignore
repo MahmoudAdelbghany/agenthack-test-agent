@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+results.json
+state.json
+.env
+.uipath/
+project.uiproj
+entry-points.json
+agent.mermaid
+*.nupkg

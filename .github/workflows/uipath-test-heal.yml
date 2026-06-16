@@ -1,0 +1,43 @@
+name: UiPath Test & Self-Heal Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test-and-heal:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install UiPath CLI
+      run: npm install -g @uipath/cli
+
+    - name: Authenticate with UiPath Cloud
+      run: |
+        uip login \
+          --authority "${{ secrets.UIPATH_AUTHORITY || 'https://cloud.uipath.com' }}" \
+          --organization "${{ secrets.UIPATH_ORGANIZATION }}" \
+          --tenant "${{ secrets.UIPATH_TENANT }}" \
+          --client-id "${{ secrets.UIPATH_CLIENT_ID }}" \
+          --client-secret "${{ secrets.UIPATH_CLIENT_SECRET }}" \
+          --output json
+
+    - name: Run Test Suite & Trigger Self-Healing on Failure
+      run: |
+        python ci_run.py \
+          --project-key "${{ secrets.UIPATH_PROJECT_KEY }}" \
+          --test-set-key "${{ secrets.UIPATH_TEST_SET_KEY }}" \
+          --slack-channel "new-channel"

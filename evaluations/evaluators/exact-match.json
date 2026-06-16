@@ -1,0 +1,12 @@
+{
+  "version": "1.0",
+  "id": "exact-match",
+  "evaluatorTypeId": "uipath-exact-match",
+  "evaluatorConfig": {
+    "name": "Status Exact Match",
+    "targetOutputKey": "status",
+    "defaultEvaluationCriteria": {
+      "expectedOutput": "healed"
+    }
+  }
+}

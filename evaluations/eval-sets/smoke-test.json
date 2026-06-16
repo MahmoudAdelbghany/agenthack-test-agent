@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "id": "smoke-test",
+  "name": "Smoke Test Set",
+  "description": "Verification of the self-healing test agent",
+  "evaluatorRefs": ["exact-match"],
+  "evaluations": [
+    {
+      "id": "test-1-self-heal",
+      "name": "Local Mock Self-Healing Run",
+      "inputs": {
+        "execution_id": "mock",
+        "repo_path": "."
+      },
+      "evaluationCriterias": {
+        "exact-match": {
+          "expectedOutput": "{\"status\": \"healed\"}"
+        }
+      },
+      "mockingStrategy": {
+        "type": "mockito",
+        "behaviors": [
+          {
+            "function": "get_user_approval",
+            "then": [
+              {
+                "type": "return",
+                "value": { "approved": true }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
