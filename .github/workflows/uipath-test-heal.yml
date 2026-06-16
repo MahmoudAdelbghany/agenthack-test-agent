@@ -37,6 +37,8 @@ jobs:
       env:
         UIPATH_CLI_ENABLE_ENV_AUTH: "true"
         UIPATH_CLI_AUTH_TOKEN: "${{ secrets.UIPATH_CLI_AUTH_TOKEN }}"
+        UIPATH_ACCESS_TOKEN: "${{ secrets.UIPATH_CLI_AUTH_TOKEN }}"
+        UIPATH_URL: "https://cloud.uipath.com"
         UIPATH_ORGANIZATION_NAME: "${{ secrets.UIPATH_ORGANIZATION }}"
         UIPATH_TENANT_NAME: "${{ secrets.UIPATH_TENANT }}"
       run: |
