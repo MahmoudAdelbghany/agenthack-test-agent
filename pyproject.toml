@@ -1,6 +1,6 @@
 [project]
 name = "agenthack-test-agent"
-version = "0.0.7"
+version = "0.0.8"
 description = "agenthack-test-agent"
 authors = [{ name = "John Doe", email = "john.doe@myemail.com" }]
 dependencies = [

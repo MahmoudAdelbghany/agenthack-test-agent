@@ -154,7 +154,13 @@ async def call_cloudflare_ai_json(prompt: str, system_prompt: str) -> dict:
 async def post_to_slack(channel: str, message: str, attachment: dict = None) -> bool:
     sdk = UiPath()
     try:
-        slack_conn = sdk.connections.retrieve("slack-triage")
+        slack_connection_id = "804fed11-8981-4c81-bf05-d582e8241dc7"
+        try:
+            slack_conn = sdk.connections.retrieve(slack_connection_id)
+        except Exception as e_id:
+            print(f"[Slack Notification] Warning: failed to retrieve connection by ID: {e_id}. Falling back to name lookup.")
+            slack_conn = sdk.connections.retrieve("slack-triage")
+            
         sdk.connections.invoke_activity(
             activity_metadata=SLACK_SEND_MESSAGE,
             connection_id=slack_conn.id,
