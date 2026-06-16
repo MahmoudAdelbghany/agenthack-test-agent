@@ -25,17 +25,12 @@ jobs:
     - name: Install UiPath CLI
       run: npm install -g @uipath/cli
 
-    - name: Authenticate with UiPath Cloud
-      run: |
-        uip login \
-          --authority "${{ secrets.UIPATH_AUTHORITY || 'https://cloud.uipath.com' }}" \
-          --organization "${{ secrets.UIPATH_ORGANIZATION }}" \
-          --tenant "${{ secrets.UIPATH_TENANT }}" \
-          --client-id "${{ secrets.UIPATH_CLIENT_ID }}" \
-          --client-secret "${{ secrets.UIPATH_CLIENT_SECRET }}" \
-          --output json
-
     - name: Run Test Suite & Trigger Self-Healing on Failure
+      env:
+        UIPATH_CLI_ENABLE_ENV_AUTH: "true"
+        UIPATH_CLI_AUTH_TOKEN: "${{ secrets.UIPATH_CLI_AUTH_TOKEN }}"
+        UIPATH_ORGANIZATION_NAME: "${{ secrets.UIPATH_ORGANIZATION }}"
+        UIPATH_TENANT_NAME: "${{ secrets.UIPATH_TENANT }}"
       run: |
         python ci_run.py \
           --project-key "${{ secrets.UIPATH_PROJECT_KEY }}" \

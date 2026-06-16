@@ -1,0 +1,1403 @@
+{
+  "Result": "Success",
+  "Code": "ScopesList",
+  "Data": [
+    {
+      "Name": "DataServiceOpenApi",
+      "DisplayName": "Data Service API",
+      "Description": "REST API to access data in Data Service",
+      "Scopes": [
+        {
+          "Name": "DataService.Data.Read",
+          "DisplayName": "Data.Read",
+          "Description": "Read data from the Data Service tenant; restricted to user's permissions",
+          "Type": 2
+        },
+        {
+          "Name": "DataService.Data.Write",
+          "DisplayName": "Data.Write",
+          "Description": "Create, edit, or delete data from the Data Service tenant; restricted to user's permissions",
+          "Type": 2
+        },
+        {
+          "Name": "DataService.Schema.Read",
+          "DisplayName": "Schema.Read",
+          "Description": "Read schema for the Data Service tenant; restricted to user's permissions",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "JamJamApi",
+      "DisplayName": "Apps",
+      "Scopes": [
+        {
+          "Name": "Apps",
+          "DisplayName": "Apps API Access",
+          "Description": "Full access to UiPath Apps APIs for external applications (includes read and create)",
+          "Type": 2
+        },
+        {
+          "Name": "Apps.Read",
+          "DisplayName": "Apps Read Access",
+          "Description": "Read-only access to UiPath Apps APIs for external applications",
+          "Type": 2
+        },
+        {
+          "Name": "Apps.Write",
+          "DisplayName": "Apps Write Access",
+          "Description": "Write access to UiPath Apps APIs for external applications (publish, deploy, upgrade)",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "Insights",
+      "DisplayName": "Insights",
+      "Scopes": [
+        {
+          "Name": "Insights",
+          "DisplayName": "Insights",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "TestManager",
+      "DisplayName": "TestManager",
+      "Description": "TestManager OAuth Api Access",
+      "Scopes": [
+        {
+          "Name": "TM.Administration",
+          "DisplayName": "TM.Administration",
+          "Description": "Administration read and write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Administration.Read",
+          "DisplayName": "TM.Administration.Read",
+          "Description": "Administration read access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Administration.Write",
+          "DisplayName": "TM.Administration.Write",
+          "Description": "Administration write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Attachments",
+          "DisplayName": "TM.Attachments",
+          "Description": "Attachments read and write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Attachments.Read",
+          "DisplayName": "TM.Attachments.Read",
+          "Description": "Attachments read access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Attachments.Write",
+          "DisplayName": "TM.Attachments.Write",
+          "Description": "Attachments write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.CustomFieldDefinitions",
+          "DisplayName": "TM.CustomFieldDefinitions",
+          "Description": "CustomFieldDefinitions read and write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.CustomFieldDefinitions.Read",
+          "DisplayName": "TM.CustomFieldDefinitions.Read",
+          "Description": "CustomFieldDefinitions read access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.CustomFieldDefinitions.Write",
+          "DisplayName": "TM.CustomFieldDefinitions.Write",
+          "Description": "CustomFieldDefinitions write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.CustomFieldValues",
+          "DisplayName": "TM.CustomFieldValues",
+          "Description": "CustomFieldValues read and write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.CustomFieldValues.Read",
+          "DisplayName": "TM.CustomFieldValues.Read",
+          "Description": "CustomFieldValues read access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.CustomFieldValues.Write",
+          "DisplayName": "TM.CustomFieldValues.Write",
+          "Description": "CustomFieldValues write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Defects",
+          "DisplayName": "TM.Defects",
+          "Description": "Defects read and write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Defects.Read",
+          "DisplayName": "TM.Defects.Read",
+          "Description": "Defects read access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Defects.Write",
+          "DisplayName": "TM.Defects.Write",
+          "Description": "Defects write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Maintenance",
+          "DisplayName": "TM.Maintenance",
+          "Description": "Maintenance read and write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Maintenance.Read",
+          "DisplayName": "TM.Maintenance.Read",
+          "Description": "Maintenance read access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Maintenance.Write",
+          "DisplayName": "TM.Maintenance.Write",
+          "Description": "Maintenance write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.ObjectLabels",
+          "DisplayName": "TM.ObjectLabels",
+          "Description": "ObjectLabels read and write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.ObjectLabels.Read",
+          "DisplayName": "TM.ObjectLabels.Read",
+          "Description": "ObjectLabels read access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.ObjectLabels.Write",
+          "DisplayName": "TM.ObjectLabels.Write",
+          "Description": "ObjectLabels write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.PerformanceScenarioExecutions",
+          "DisplayName": "TM.PerformanceScenarioExecutions",
+          "Description": "PerformanceScenarioExecutions read and write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.PerformanceScenarioExecutions.Read",
+          "DisplayName": "TM.PerformanceScenarioExecutions.Read",
+          "Description": "PerformanceScenarioExecutions read access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.PerformanceScenarioExecutions.Write",
+          "DisplayName": "TM.PerformanceScenarioExecutions.Write",
+          "Description": "PerformanceScenarioExecutions write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.PerformanceScenarios",
+          "DisplayName": "TM.PerformanceScenarios",
+          "Description": "PerformanceScenarios read and write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.PerformanceScenarios.Read",
+          "DisplayName": "TM.PerformanceScenarios.Read",
+          "Description": "PerformanceScenarios read access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.PerformanceScenarios.Write",
+          "DisplayName": "TM.PerformanceScenarios.Write",
+          "Description": "PerformanceScenarios write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Projects",
+          "DisplayName": "TM.Projects",
+          "Description": "Projects read and write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Projects.Read",
+          "DisplayName": "TM.Projects.Read",
+          "Description": "Projects read access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Projects.Write",
+          "DisplayName": "TM.Projects.Write",
+          "Description": "Projects write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Prompts",
+          "DisplayName": "TM.Prompts",
+          "Description": "Read access to the Test Manager Prompt Library.",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Prompts.Read",
+          "DisplayName": "TM.Prompts.Read",
+          "Description": "Prompts read access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Prompts.Write",
+          "DisplayName": "TM.Prompts.Write",
+          "Description": "Prompts write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Requirements",
+          "DisplayName": "TM.Requirements",
+          "Description": "Requirements read and write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Requirements.Read",
+          "DisplayName": "TM.Requirements.Read",
+          "Description": "Requirements read access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Requirements.Write",
+          "DisplayName": "TM.Requirements.Write",
+          "Description": "Requirements write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.TestCases",
+          "DisplayName": "TM.TestCases",
+          "Description": "TestCases read and write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.TestCases.Read",
+          "DisplayName": "TM.TestCases.Read",
+          "Description": "TestCases read access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.TestCases.Write",
+          "DisplayName": "TM.TestCases.Write",
+          "Description": "TestCases write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.TestExecutions",
+          "DisplayName": "TM.TestExecutions",
+          "Description": "TestExecutions read and write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.TestExecutions.Read",
+          "DisplayName": "TM.TestExecutions.Read",
+          "Description": "TestExecutions read access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.TestExecutions.Write",
+          "DisplayName": "TM.TestExecutions.Write",
+          "Description": "TestExecutions write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.TestSets",
+          "DisplayName": "TM.TestSets",
+          "Description": "TestSets read and write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.TestSets.Read",
+          "DisplayName": "TM.TestSets.Read",
+          "Description": "TestSets read access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.TestSets.Write",
+          "DisplayName": "TM.TestSets.Write",
+          "Description": "TestSets write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Users",
+          "DisplayName": "TM.Users",
+          "Description": "Users read and write access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Users.Read",
+          "DisplayName": "TM.Users.Read",
+          "Description": "Users read access in TestManager",
+          "Type": 2
+        },
+        {
+          "Name": "TM.Users.Write",
+          "DisplayName": "TM.Users.Write",
+          "Description": "Users write access in TestManager",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "PlatformManagement",
+      "DisplayName": "Platform Management API Access",
+      "Description": "Platform Management OAuth API Access",
+      "Scopes": [
+        {
+          "Name": "PM.Audit",
+          "DisplayName": "PM.Audit",
+          "Description": "Audit read and write access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.Audit.Read",
+          "DisplayName": "PM.Audit.Read",
+          "Description": "Audit read access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.AuthSetting",
+          "DisplayName": "PM.AuthSetting",
+          "Description": "Authentication setting access to Platform Management.",
+          "Type": 1
+        },
+        {
+          "Name": "PM.Directory",
+          "DisplayName": "PM.Directory",
+          "Description": "Access to search and resolve directory entities",
+          "Type": 2
+        },
+        {
+          "Name": "PM.Group",
+          "DisplayName": "PM.Group",
+          "Description": "Group read and write access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.Group.Read",
+          "DisplayName": "PM.Group.Read",
+          "Description": "Group read access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.Group.Write",
+          "DisplayName": "PM.Group.Write",
+          "Description": "Group write access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.License",
+          "DisplayName": "PM.License",
+          "Description": "License read and write access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.License.Read",
+          "DisplayName": "PM.License.Read",
+          "Description": "License read access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.License.Write",
+          "DisplayName": "PM.License.Write",
+          "Description": "License write access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.OAuthApp",
+          "DisplayName": "PM.OAuthApp",
+          "Description": "Read and write access to all OAuth apps in the organization",
+          "Type": 1
+        },
+        {
+          "Name": "PM.OAuthApp.Read",
+          "DisplayName": "PM.OAuthApp.Read",
+          "Description": "Read access to all OAuth apps in the organization",
+          "Type": 1
+        },
+        {
+          "Name": "PM.OAuthApp.Write",
+          "DisplayName": "PM.OAuthApp.Write",
+          "Description": "Write access to all OAuth apps in the organization",
+          "Type": 1
+        },
+        {
+          "Name": "PM.OAuthAppSecret.Write",
+          "DisplayName": "PM.OAuthAppSecret.Write",
+          "Description": "Write access to all OAuth apps secrets in the organization",
+          "Type": 1
+        },
+        {
+          "Name": "PM.RobotAccount",
+          "DisplayName": "PM.RobotAccount",
+          "Description": "RobotAccount read and write access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.RobotAccount.Read",
+          "DisplayName": "PM.RobotAccount.Read",
+          "Description": "RobotAccount read access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.RobotAccount.Write",
+          "DisplayName": "PM.RobotAccount.Write",
+          "Description": "RobotAccount write access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.Scim",
+          "DisplayName": "PM.Scim",
+          "Description": "Write access to manage SCIM entities",
+          "Type": 2
+        },
+        {
+          "Name": "PM.Security",
+          "DisplayName": "PM.Security",
+          "Description": "Security read and write access in PlatformManagement",
+          "Type": 1
+        },
+        {
+          "Name": "PM.Setting",
+          "DisplayName": "PM.Setting",
+          "Description": "Setting read and write access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.Setting.Read",
+          "DisplayName": "PM.Setting.Read",
+          "Description": "Setting read access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.Setting.Write",
+          "DisplayName": "PM.Setting.Write",
+          "Description": "Setting write access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.User",
+          "DisplayName": "PM.User",
+          "Description": "User read and write access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.User.Read",
+          "DisplayName": "PM.User.Read",
+          "Description": "User read access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.User.Write",
+          "DisplayName": "PM.User.Write",
+          "Description": "User write access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.UserLoginAttempt",
+          "DisplayName": "PM.UserLoginAttempt",
+          "Description": "UserLoginAttempt read and write access in PlatformManagement",
+          "Type": 2
+        },
+        {
+          "Name": "PM.UserLoginAttempt.Read",
+          "DisplayName": "PM.UserLoginAttempt.Read",
+          "Description": "UserLoginAttempt read access in PlatformManagement",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "UiPath.Orchestrator",
+      "DisplayName": "Orchestrator API Access",
+      "Description": "Orchestrator OAuth Api Access",
+      "Scopes": [
+        {
+          "Name": "OR.Administration",
+          "DisplayName": "OR.Administration",
+          "Description": "Administration read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Administration.Read",
+          "DisplayName": "OR.Administration.Read",
+          "Description": "Administration read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Administration.Write",
+          "DisplayName": "OR.Administration.Write",
+          "Description": "Administration write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Analytics",
+          "DisplayName": "OR.Analytics",
+          "Description": "Analytics read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Analytics.Read",
+          "DisplayName": "OR.Analytics.Read",
+          "Description": "Analytics read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Analytics.Write",
+          "DisplayName": "OR.Analytics.Write",
+          "Description": "Analytics write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Assets",
+          "DisplayName": "OR.Assets",
+          "Description": "Assets read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Assets.Read",
+          "DisplayName": "OR.Assets.Read",
+          "Description": "Assets read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Assets.Write",
+          "DisplayName": "OR.Assets.Write",
+          "Description": "Assets write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Audit",
+          "DisplayName": "OR.Audit",
+          "Description": "Audit read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Audit.Read",
+          "DisplayName": "OR.Audit.Read",
+          "Description": "Audit read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Audit.Write",
+          "DisplayName": "OR.Audit.Write",
+          "Description": "Audit write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.AutomationSolutions.Access",
+          "DisplayName": "OR.AutomationSolutions.Access",
+          "Description": "AutomationSolutions access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.BackgroundTasks",
+          "DisplayName": "OR.BackgroundTasks",
+          "Description": "BackgroundTasks read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.BackgroundTasks.Read",
+          "DisplayName": "OR.BackgroundTasks.Read",
+          "Description": "BackgroundTasks read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.BackgroundTasks.Write",
+          "DisplayName": "OR.BackgroundTasks.Write",
+          "Description": "BackgroundTasks write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Buckets",
+          "DisplayName": "OR.Buckets",
+          "Description": "Buckets read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Buckets.Read",
+          "DisplayName": "OR.Buckets.Read",
+          "Description": "Buckets read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Buckets.Write",
+          "DisplayName": "OR.Buckets.Write",
+          "Description": "Buckets write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Execution",
+          "DisplayName": "OR.Execution",
+          "Description": "Execution read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Execution.Read",
+          "DisplayName": "OR.Execution.Read",
+          "Description": "Execution read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Execution.Write",
+          "DisplayName": "OR.Execution.Write",
+          "Description": "Execution write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Folders",
+          "DisplayName": "OR.Folders",
+          "Description": "Folders read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Folders.Read",
+          "DisplayName": "OR.Folders.Read",
+          "Description": "Folders read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Folders.Write",
+          "DisplayName": "OR.Folders.Write",
+          "Description": "Folders write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Hypervisor",
+          "DisplayName": "OR.Hypervisor",
+          "Description": "Hypervisor read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Hypervisor.Read",
+          "DisplayName": "OR.Hypervisor.Read",
+          "Description": "Hypervisor read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Hypervisor.Write",
+          "DisplayName": "OR.Hypervisor.Write",
+          "Description": "Hypervisor write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Jobs",
+          "DisplayName": "OR.Jobs",
+          "Description": "Jobs read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Jobs.Read",
+          "DisplayName": "OR.Jobs.Read",
+          "Description": "Jobs read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Jobs.Write",
+          "DisplayName": "OR.Jobs.Write",
+          "Description": "Jobs write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.License",
+          "DisplayName": "OR.License",
+          "Description": "License read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.License.Read",
+          "DisplayName": "OR.License.Read",
+          "Description": "License read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.License.Write",
+          "DisplayName": "OR.License.Write",
+          "Description": "License write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Machines",
+          "DisplayName": "OR.Machines",
+          "Description": "Machines read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Machines.Read",
+          "DisplayName": "OR.Machines.Read",
+          "Description": "Machines read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Machines.Write",
+          "DisplayName": "OR.Machines.Write",
+          "Description": "Machines write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.ML",
+          "DisplayName": "OR.ML",
+          "Description": "ML read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.ML.Read",
+          "DisplayName": "OR.ML.Read",
+          "Description": "ML read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.ML.Write",
+          "DisplayName": "OR.ML.Write",
+          "Description": "ML write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Monitoring",
+          "DisplayName": "OR.Monitoring",
+          "Description": "Monitoring read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Monitoring.Read",
+          "DisplayName": "OR.Monitoring.Read",
+          "Description": "Monitoring read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Monitoring.Write",
+          "DisplayName": "OR.Monitoring.Write",
+          "Description": "Monitoring write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Queues",
+          "DisplayName": "OR.Queues",
+          "Description": "Queues read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Queues.Read",
+          "DisplayName": "OR.Queues.Read",
+          "Description": "Queues read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Queues.Write",
+          "DisplayName": "OR.Queues.Write",
+          "Description": "Queues write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Robots",
+          "DisplayName": "OR.Robots",
+          "Description": "Robots read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Robots.Read",
+          "DisplayName": "OR.Robots.Read",
+          "Description": "Robots read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Robots.Write",
+          "DisplayName": "OR.Robots.Write",
+          "Description": "Robots write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Settings",
+          "DisplayName": "OR.Settings",
+          "Description": "Settings read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Settings.Read",
+          "DisplayName": "OR.Settings.Read",
+          "Description": "Settings read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Settings.Write",
+          "DisplayName": "OR.Settings.Write",
+          "Description": "Settings write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Tasks",
+          "DisplayName": "OR.Tasks",
+          "Description": "Tasks read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Tasks.Read",
+          "DisplayName": "OR.Tasks.Read",
+          "Description": "Tasks read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Tasks.Write",
+          "DisplayName": "OR.Tasks.Write",
+          "Description": "Tasks write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.TestDataQueues",
+          "DisplayName": "OR.TestDataQueues",
+          "Description": "TestDataQueues read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.TestDataQueues.Read",
+          "DisplayName": "OR.TestDataQueues.Read",
+          "Description": "TestDataQueues read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.TestDataQueues.Write",
+          "DisplayName": "OR.TestDataQueues.Write",
+          "Description": "TestDataQueues write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.TestSetExecutions",
+          "DisplayName": "OR.TestSetExecutions",
+          "Description": "TestSetExecutions read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.TestSetExecutions.Read",
+          "DisplayName": "OR.TestSetExecutions.Read",
+          "Description": "TestSetExecutions read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.TestSetExecutions.Write",
+          "DisplayName": "OR.TestSetExecutions.Write",
+          "Description": "TestSetExecutions write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.TestSets",
+          "DisplayName": "OR.TestSets",
+          "Description": "TestSets read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.TestSets.Read",
+          "DisplayName": "OR.TestSets.Read",
+          "Description": "TestSets read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.TestSets.Write",
+          "DisplayName": "OR.TestSets.Write",
+          "Description": "TestSets write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.TestSetSchedules",
+          "DisplayName": "OR.TestSetSchedules",
+          "Description": "TestSetSchedules read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.TestSetSchedules.Read",
+          "DisplayName": "OR.TestSetSchedules.Read",
+          "Description": "TestSetSchedules read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.TestSetSchedules.Write",
+          "DisplayName": "OR.TestSetSchedules.Write",
+          "Description": "TestSetSchedules write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Users",
+          "DisplayName": "OR.Users",
+          "Description": "Users read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Users.Read",
+          "DisplayName": "OR.Users.Read",
+          "Description": "Users read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Users.Write",
+          "DisplayName": "OR.Users.Write",
+          "Description": "Users write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Webhooks",
+          "DisplayName": "OR.Webhooks",
+          "Description": "Webhooks read and write access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Webhooks.Read",
+          "DisplayName": "OR.Webhooks.Read",
+          "Description": "Webhooks read access in Orchestrator",
+          "Type": 2
+        },
+        {
+          "Name": "OR.Webhooks.Write",
+          "DisplayName": "OR.Webhooks.Write",
+          "Description": "Webhooks write access in Orchestrator",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "UiPath.DocumentUnderstanding",
+      "DisplayName": "Document Understanding",
+      "Scopes": [
+        {
+          "Name": "Du.Classification.Api",
+          "DisplayName": "Du.Classification.Api",
+          "Description": "Access to Classification Service for Document Understanding",
+          "Type": 2
+        },
+        {
+          "Name": "Du.DataDeletion.Api",
+          "DisplayName": "Du.DataDeletion.Api",
+          "Description": "Access to Data Deletion Service for Document Understanding",
+          "Type": 2
+        },
+        {
+          "Name": "Du.Digitization.Api",
+          "DisplayName": "Du.Digitization.Api",
+          "Description": "Access to Digitization Service for Document Understanding",
+          "Type": 2
+        },
+        {
+          "Name": "Du.DocumentManager.Document",
+          "DisplayName": "Du.DocumentManager.Document",
+          "Description": "Access to Document Manager for Document Understanding",
+          "Type": 1
+        },
+        {
+          "Name": "Du.Extraction.Api",
+          "DisplayName": "Du.Extraction.Api",
+          "Description": "Access to Extraction Service for Document Understanding",
+          "Type": 2
+        },
+        {
+          "Name": "Du.Validation.Api",
+          "DisplayName": "Du.Validation.Api",
+          "Description": "Access to Validation Service for Document Understanding",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "UiPath.AICenter",
+      "DisplayName": "AICenter API Access",
+      "Description": "AICenter OAuth Api Access",
+      "Scopes": [
+        {
+          "Name": "AIC.Dataset.Create",
+          "DisplayName": "AIC.Dataset.Create",
+          "Description": "Dataset create access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.Dataset.Delete",
+          "DisplayName": "AIC.Dataset.Delete",
+          "Description": "Dataset delete access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.Dataset.Edit",
+          "DisplayName": "AIC.Dataset.Edit",
+          "Description": "Dataset edit access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.Dataset.View",
+          "DisplayName": "AIC.Dataset.View",
+          "Description": "Dataset view access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.MLPackages.Create",
+          "DisplayName": "AIC.MLPackages.Create",
+          "Description": "MLPackages create access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.MLPackages.Delete",
+          "DisplayName": "AIC.MLPackages.Delete",
+          "Description": "MLPackages delete access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.MLPackages.Edit",
+          "DisplayName": "AIC.MLPackages.Edit",
+          "Description": "MLPackages edit access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.MLPackages.View",
+          "DisplayName": "AIC.MLPackages.View",
+          "Description": "MLPackages view access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.MLSkills.Create",
+          "DisplayName": "AIC.MLSkills.Create",
+          "Description": "MLSkills create access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.MLSkills.Delete",
+          "DisplayName": "AIC.MLSkills.Delete",
+          "Description": "MLSkills delete access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.MLSkills.Edit",
+          "DisplayName": "AIC.MLSkills.Edit",
+          "Description": "MLSkills edit access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.MLSkills.View",
+          "DisplayName": "AIC.MLSkills.View",
+          "Description": "MLSkills view access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.Pipelines.Create",
+          "DisplayName": "AIC.Pipelines.Create",
+          "Description": "Pipelines create access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.Pipelines.Delete",
+          "DisplayName": "AIC.Pipelines.Delete",
+          "Description": "Pipelines delete access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.Pipelines.Edit",
+          "DisplayName": "AIC.Pipelines.Edit",
+          "Description": "Pipelines edit access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.Pipelines.View",
+          "DisplayName": "AIC.Pipelines.View",
+          "Description": "Pipelines view access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.Project.Create",
+          "DisplayName": "AIC.Project.Create",
+          "Description": "Project create access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.Project.Delete",
+          "DisplayName": "AIC.Project.Delete",
+          "Description": "Project delete access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.Project.Edit",
+          "DisplayName": "AIC.Project.Edit",
+          "Description": "Project edit access in AICenter",
+          "Type": 1
+        },
+        {
+          "Name": "AIC.Project.View",
+          "DisplayName": "AIC.Project.View",
+          "Description": "Project view access in AICenter",
+          "Type": 1
+        }
+      ]
+    },
+    {
+      "Name": "AutomationSolutions",
+      "DisplayName": "Solutions Management API Access",
+      "Scopes": [
+        {
+          "Name": "AutomationSolutions",
+          "DisplayName": "AutomationSolutions",
+          "Type": 2
+        },
+        {
+          "Name": "Solutions.Deployments",
+          "DisplayName": "Solutions.Deployments",
+          "Type": 2
+        },
+        {
+          "Name": "Solutions.Deployments.Read",
+          "DisplayName": "Solutions.Deployments.Read",
+          "Type": 2
+        },
+        {
+          "Name": "Solutions.Deployments.Write",
+          "DisplayName": "Solutions.Deployments.Write",
+          "Type": 2
+        },
+        {
+          "Name": "Solutions.Packages",
+          "DisplayName": "Solutions.Packages",
+          "Type": 2
+        },
+        {
+          "Name": "Solutions.Packages.Read",
+          "DisplayName": "Solutions.Packages.Read",
+          "Type": 2
+        },
+        {
+          "Name": "Solutions.Packages.Write",
+          "DisplayName": "Solutions.Packages.Write",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "ResourceCatalogServiceApi",
+      "DisplayName": "Resource Catalog Service Api",
+      "Scopes": [
+        {
+          "Name": "RCS.FolderAuthorization",
+          "DisplayName": "RCS.FolderAuthorization",
+          "Description": "FolderAuthorization read and write access in ResourceCatalog",
+          "Type": 2
+        },
+        {
+          "Name": "RCS.TagsManagement",
+          "DisplayName": "RCS.TagsManagement",
+          "Description": "TagsManagement read and write access in ResourceCatalog",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "Insights.RealTimeData",
+      "DisplayName": "Insights.RealTimeData",
+      "Scopes": [
+        {
+          "Name": "Insights.RealTimeData",
+          "DisplayName": "Insights.RealTimeData",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "Marketplace",
+      "DisplayName": "Marketplace",
+      "Scopes": [
+        {
+          "Name": "Marketplace",
+          "DisplayName": "Marketplace",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "Academy",
+      "DisplayName": "Academy",
+      "Scopes": [
+        {
+          "Name": "Academy",
+          "DisplayName": "Academy",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "StudioWebPublicS2S",
+      "DisplayName": "StudioWeb API Access",
+      "Description": "StudioWeb API Access",
+      "Scopes": [
+        {
+          "Name": "StudioWebS2S.Project.CRUD",
+          "DisplayName": "StudioWebS2S.Project.CRUD",
+          "Description": "Enable S2S calls to create, remove, and edit projects",
+          "Type": 1
+        },
+        {
+          "Name": "StudioWebS2S.Share.CRUD",
+          "DisplayName": "StudioWebS2S.Share.CRUD",
+          "Description": "Enable S2S calls to enable or turn off project sharing with a specific user or group",
+          "Type": 1
+        },
+        {
+          "Name": "StudioWebS2S.Workflow.CRUD",
+          "DisplayName": "StudioWebS2S.Workflow.CRUD",
+          "Description": "Enable S2S calls to create, remove, and edit workflows in a project",
+          "Type": 1
+        }
+      ]
+    },
+    {
+      "Name": "EnterpriseContextService",
+      "DisplayName": "Context Grounding API Access",
+      "Description": "Enterprise Context Service OAuth API Access",
+      "Scopes": [
+        {
+          "Name": "EnterpriseContextService",
+          "DisplayName": "EnterpriseContextService",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "PIMS",
+      "DisplayName": "Maestro API Access",
+      "Description": "Used to access ProcessInstanceManagementService's REST APIs",
+      "Scopes": [
+        {
+          "Name": "PIMS",
+          "DisplayName": "PIMS",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "ProcessMining.API",
+      "DisplayName": "Process Mining API access",
+      "Description": "Process Mining API access",
+      "Scopes": [
+        {
+          "Name": "ProcessMining.DataExtractor",
+          "DisplayName": "ProcessMining.DataExtractor",
+          "Description": "Allows API access for data extractor.",
+          "Type": 1
+        }
+      ]
+    },
+    {
+      "Name": "Traces.Api",
+      "DisplayName": "Traces API Access",
+      "Description": "Access to Tracing Service",
+      "Scopes": [
+        {
+          "Name": "Traces.Api",
+          "DisplayName": "Tracing Service",
+          "Description": "Access to Tracing Service",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "DataFabricOpenApi",
+      "DisplayName": "Data Fabric API",
+      "Description": "REST API to access data in Data Fabric",
+      "Scopes": [
+        {
+          "Name": "DataFabric.Data.Read",
+          "DisplayName": "Data.Read",
+          "Description": "Read data from the Data Fabric tenant; restricted to user's permissions",
+          "Type": 2
+        },
+        {
+          "Name": "DataFabric.Data.Write",
+          "DisplayName": "Data.Write",
+          "Description": "Create, edit, or delete data from the Data Fabric tenant; restricted to user's permissions",
+          "Type": 2
+        },
+        {
+          "Name": "DataFabric.Schema.Read",
+          "DisplayName": "Schema.Read",
+          "Description": "Read schema for the Data Fabric tenant; restricted to user's permissions",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "Ixp.ExternalService",
+      "DisplayName": "IXP.ExternalService",
+      "Description": "IXP OAuth Api Access for External Services",
+      "Scopes": [
+        {
+          "Name": "Ixp.ApiAccess",
+          "DisplayName": "Ixp.ApiAccess",
+          "Description": "Allows the application to be granted permissions in IXP",
+          "Type": 1
+        }
+      ]
+    },
+    {
+      "Name": "ConversationalAgents",
+      "DisplayName": "Conversational Agents",
+      "Description": "Conversational Agents",
+      "Scopes": [
+        {
+          "Name": "ConversationalAgents",
+          "DisplayName": "Conversational Agents",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "AITL.Audit.Export",
+      "DisplayName": "AI Trust Layer Audit Export",
+      "Description": "AI Trust Layer Audit Export OAuth API Access",
+      "Scopes": [
+        {
+          "Name": "AITL.Audit.Export",
+          "DisplayName": "AI Trust Layer Audit Export",
+          "Description": "AI Trust Layer Audit Export OAuth API Access",
+          "Type": 2
+        }
+      ]
+    },
+    {
+      "Name": "Relay.Service.Api",
+      "DisplayName": "Relay service API access",
+      "Description": "Relay service API access",
+      "Scopes": [
+        {
+          "Name": "Relay.Client",
+          "DisplayName": "Relay.Client",
+          "Description": "Access to APIs required for Relay clients",
+          "Type": 1
+        }
+      ]
+    },
+    {
+      "Name": "UiPath.IntegrationService",
+      "DisplayName": "UiPath.IntegrationService",
+      "Scopes": [
+        {
+          "Name": "IS.Connections.Read",
+          "DisplayName": "IS.Connections.Read",
+          "Type": 2
+        },
+        {
+          "Name": "IS.Connector.Export",
+          "DisplayName": "IS.Connector.Export",
+          "Type": 2
+        }
+      ]
+    }
+  ]
+}

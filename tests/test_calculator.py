@@ -1,8 +1,6 @@
-""
 def add(a, b):
-    # Returns the sum of a and b
-    return a + b
+    # Bug: returns multiplication instead of addition
+    return a * b
 
 def test_add():
     assert add(2, 3) == 5
-""

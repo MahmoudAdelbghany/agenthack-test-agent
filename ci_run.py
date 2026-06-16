@@ -93,9 +93,11 @@ def main():
         if invoke_result.returncode == 0:
             print("Self-healing agent successfully triggered in Orchestrator!")
             print("Check your Slack channel for failure alerts and the interactive approval buttons.")
+            print(invoke_result.stdout)
         else:
             print("Error triggering self-healing agent:")
-            print(invoke_result.stderr)
+            print("STDOUT:", invoke_result.stdout)
+            print("STDERR:", invoke_result.stderr)
             sys.exit(1)
     else:
         print("\n🟢 All tests passed successfully! No self-healing needed.")
