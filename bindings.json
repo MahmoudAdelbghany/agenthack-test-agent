@@ -6,15 +6,78 @@
       "key": "slack-triage",
       "value": {
         "ConnectionId": {
-          "defaultValue": "slack-triage",
+          "defaultValue": "mahmoud.a.rageh",
           "isExpression": false,
-          "displayName": "slack-triage"
+          "displayName": "mahmoud.a.rageh"
         }
       },
       "metadata": {
         "UseConnectionService": "True",
         "Connector": "uipath-salesforce-slack",
         "BindingsVersion": "2.2"
+      }
+    },
+    {
+      "resource": "asset",
+      "key": "CLOUDFLARE_ACCOUNT_ID",
+      "value": {
+        "name": {
+          "defaultValue": "CLOUDFLARE_ACCOUNT_ID",
+          "isExpression": false,
+          "displayName": "Name"
+        },
+        "folderPath": {
+          "defaultValue": "",
+          "isExpression": false,
+          "displayName": "Folder Path"
+        }
+      },
+      "metadata": {
+        "ActivityName": "retrieve",
+        "BindingsVersion": "2.2",
+        "DisplayLabel": "FullName"
+      }
+    },
+    {
+      "resource": "asset",
+      "key": "CLOUDFLARE_API_TOKEN",
+      "value": {
+        "name": {
+          "defaultValue": "CLOUDFLARE_API_TOKEN",
+          "isExpression": false,
+          "displayName": "Name"
+        },
+        "folderPath": {
+          "defaultValue": "",
+          "isExpression": false,
+          "displayName": "Folder Path"
+        }
+      },
+      "metadata": {
+        "ActivityName": "retrieve",
+        "BindingsVersion": "2.2",
+        "DisplayLabel": "FullName"
+      }
+    },
+    {
+      "resource": "asset",
+      "key": "GITHUB_TOKEN",
+      "value": {
+        "name": {
+          "defaultValue": "GITHUB_TOKEN",
+          "isExpression": false,
+          "displayName": "Name"
+        },
+        "folderPath": {
+          "defaultValue": "",
+          "isExpression": false,
+          "displayName": "Folder Path"
+        }
+      },
+      "metadata": {
+        "ActivityName": "retrieve",
+        "BindingsVersion": "2.2",
+        "DisplayLabel": "FullName"
       }
     }
   ]

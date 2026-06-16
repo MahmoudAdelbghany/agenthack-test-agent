@@ -71,13 +71,27 @@ async def call_cloudflare_ai(prompt: str, system_prompt: str = "You are a helpfu
     account_id = os.getenv("CLOUDFLARE_ACCOUNT_ID")
     api_token = os.getenv("CLOUDFLARE_API_TOKEN")
     if not account_id or not api_token:
-        from dotenv import load_dotenv
-        load_dotenv()
-        account_id = os.getenv("CLOUDFLARE_ACCOUNT_ID")
-        api_token = os.getenv("CLOUDFLARE_API_TOKEN")
+        try:
+            from dotenv import load_dotenv
+            load_dotenv()
+            account_id = os.getenv("CLOUDFLARE_ACCOUNT_ID")
+            api_token = os.getenv("CLOUDFLARE_API_TOKEN")
+        except Exception:
+            pass
         
     if not account_id or not api_token:
-        raise ValueError("Missing CLOUDFLARE_ACCOUNT_ID or CLOUDFLARE_API_TOKEN environment variables.")
+        try:
+            sdk = UiPath()
+            if not account_id:
+                account_id = sdk.assets.retrieve("CLOUDFLARE_ACCOUNT_ID").value
+            if not api_token:
+                api_token = sdk.assets.retrieve("CLOUDFLARE_API_TOKEN").value
+        except Exception as e:
+            print(f"[Orchestrator Assets] Warning: failed to fetch Cloudflare credentials from Assets: {e}")
+            
+    if not account_id or not api_token:
+        raise ValueError("Missing CLOUDFLARE_ACCOUNT_ID or CLOUDFLARE_API_TOKEN environment variables or Assets.")
+
         
     model = "@cf/meta/llama-3.1-8b-instruct-fast"
     url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/{model}"
@@ -416,6 +430,20 @@ async def self_healing(state: GraphState) -> Command:
     
     # Sync fix to GitHub repository if GITHUB_TOKEN environment variable is set
     github_token = os.getenv("GITHUB_TOKEN")
+    if not github_token:
+        try:
+            from dotenv import load_dotenv
+            load_dotenv()
+            github_token = os.getenv("GITHUB_TOKEN")
+        except Exception:
+            pass
+    if not github_token:
+        try:
+            sdk = UiPath()
+            github_token = sdk.assets.retrieve("GITHUB_TOKEN").value
+        except Exception as e:
+            print(f"[Orchestrator Assets] Warning: failed to fetch GITHUB_TOKEN from Assets: {e}")
+            
     if github_token:
         print("GITHUB_TOKEN detected. Syncing fix to GitHub repository...")
         owner = os.getenv("GITHUB_OWNER", "MahmoudAdelbghany")
