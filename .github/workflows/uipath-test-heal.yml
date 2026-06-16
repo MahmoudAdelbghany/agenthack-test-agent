@@ -25,6 +25,14 @@ jobs:
     - name: Install UiPath CLI
       run: npm install -g @uipath/cli
 
+    - name: Configure Python Environment and UiPath Coded Agent
+      run: |
+        python -m venv .venv
+        source .venv/bin/activate
+        pip install uv
+        uv sync
+        uip codedagent setup
+
     - name: Run Test Suite & Trigger Self-Healing on Failure
       env:
         UIPATH_CLI_ENABLE_ENV_AUTH: "true"
@@ -32,6 +40,7 @@ jobs:
         UIPATH_ORGANIZATION_NAME: "${{ secrets.UIPATH_ORGANIZATION }}"
         UIPATH_TENANT_NAME: "${{ secrets.UIPATH_TENANT }}"
       run: |
+        source .venv/bin/activate
         python ci_run.py \
           --project-key "${{ secrets.UIPATH_PROJECT_KEY }}" \
           --test-set-key "${{ secrets.UIPATH_TEST_SET_KEY }}" \
