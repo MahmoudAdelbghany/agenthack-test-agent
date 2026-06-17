@@ -48,13 +48,14 @@ class GraphInput(BaseModel):
     project_key: Optional[str] = Field(default=None, description="The UiPath Test Manager project key")
     slack_channel: Optional[str] = Field(default=None, description="Slack channel to notify")
     repo_path: Optional[str] = Field(default=".", description="Path to the repository to run tests in")
+    approved: Optional[bool] = Field(default=None, description="Whether the fix is approved (used for resume/bypass)")
 
 class GraphState(BaseModel):
     execution_id: str
     project_key: Optional[str] = None
     slack_channel: Optional[str] = None
     repo_path: str = "."
-    failed_tests: List[FailedTestDetail] = []
+    failed_tests: List[dict] = []
     current_test_index: int = 0
     approved: Optional[bool] = None
     status: str = "initialized"
@@ -264,18 +265,20 @@ async def fetch_failures(state: GraphState) -> Command:
                         with open(file_path, "r") as f:
                             code_context = f.read()
                             
-                    failed_tests.append(FailedTestDetail(
-                        test_name=test_name,
-                        file_path=file_path,
-                        line_number=1,
-                        error_message=error_msg,
-                        traceback=traceback,
-                        code_context=code_context
-                    ))
+                    failed_tests.append({
+                        "test_name": test_name,
+                        "file_path": file_path,
+                        "line_number": 1,
+                        "error_message": error_msg,
+                        "traceback": traceback,
+                        "code_context": code_context,
+                        "proposed_fix": None,
+                        "explanation": None
+                    })
         except Exception as e:
             print(f"[Test Manager] Warning: Could not fetch details from Test Manager ({e}). Falling back to local/mock mode.")
             is_mock = True
-
+ 
     if is_mock or not failed_tests:
         print("Running local mock test suite to capture failures...")
         # Reset the test file to its buggy state to ensure idempotency and testability
@@ -311,14 +314,16 @@ def test_add():
             with open(file_path, "r") as f:
                 code_context = f.read()
                 
-        failed_tests.append(FailedTestDetail(
-            test_name="test_add",
-            file_path=file_path,
-            line_number=line_num,
-            error_message=error_msg,
-            traceback=output,
-            code_context=code_context
-        ))
+        failed_tests.append({
+            "test_name": "test_add",
+            "file_path": file_path,
+            "line_number": line_num,
+            "error_message": error_msg,
+            "traceback": output,
+            "code_context": code_context,
+            "proposed_fix": None,
+            "explanation": None
+        })
 
     return Command(update={
         "failed_tests": failed_tests,
@@ -334,15 +339,15 @@ async def diagnose_failures(state: GraphState) -> Command:
     current_test = state.failed_tests[state.current_test_index]
     
     prompt = f"""We have a failing test case in our test suite.
-Test File: {current_test.file_path}
-Test Name: {current_test.test_name}
-Error message: {current_test.error_message}
+Test File: {current_test['file_path']}
+Test Name: {current_test['test_name']}
+Error message: {current_test['error_message']}
 Traceback:
-{current_test.traceback}
+{current_test['traceback']}
 
 Here is the full content of the test file:
 ```python
-{current_test.code_context}
+{current_test['code_context']}
 ```
 
 Identify the bug, describe the cause, and return the modified file contents to fix the issue.
@@ -355,14 +360,14 @@ You MUST respond with a valid JSON object containing exactly two keys:
 Do not wrap your response in markdown code blocks or add any text outside of the JSON object.
 """
 
-    print(f"Calling Cloudflare AI for test: {current_test.test_name}...")
+    print(f"Calling Cloudflare AI for test: {current_test['test_name']}...")
     diagnosis = await call_cloudflare_ai_json(prompt, system_prompt)
     
     explanation = diagnosis.get("explanation", "Could not analyze the failure.")
-    fixed_content = diagnosis.get("fixed_content", current_test.code_context)
+    fixed_content = diagnosis.get("fixed_content", current_test['code_context'])
     
-    current_test.explanation = explanation
-    current_test.proposed_fix = fixed_content
+    current_test["explanation"] = explanation
+    current_test["proposed_fix"] = fixed_content
     
     print(f"Explanation: {explanation}")
     
@@ -376,9 +381,17 @@ Do not wrap your response in markdown code blocks or add any text outside of the
 async def slack_notification(state: GraphState) -> Command:
     current_test = state.failed_tests[state.current_test_index]
     
+    # Check if already approved via input arguments (e.g. if state was reset/not restored)
+    if state.approved:
+        print("Approval already present in state/input. Bypassing interrupt.")
+        return Command(update={
+            "approved": True,
+            "status": "approval_processed"
+        })
+    
     msg = f"🚨 *Test Failure Alert*\n" \
-          f"*Test Case:* `{current_test.test_name}` in `{current_test.file_path}`\n" \
-          f"*Root Cause:* {current_test.explanation}\n\n" \
+          f"*Test Case:* `{current_test['test_name']}` in `{current_test['file_path']}`\n" \
+          f"*Root Cause:* {current_test['explanation']}\n\n" \
           f"I suggest applying the fix. Would you like me to do it?"
           
     print("\n=================== SLACK NOTIFICATION PENDING ===================")
@@ -403,9 +416,9 @@ async def slack_notification(state: GraphState) -> Command:
         
     # Pause execution for human approval
     decision = get_user_approval(
-        current_test.test_name,
-        current_test.explanation,
-        current_test.proposed_fix
+        current_test['test_name'],
+        current_test['explanation'],
+        current_test['proposed_fix']
     )
     
     # Receive response from interrupt (local or webhook)
@@ -427,12 +440,12 @@ async def self_healing(state: GraphState) -> Command:
         })
         
     current_test = state.failed_tests[state.current_test_index]
-    print(f"--- Applying Fix for test: {current_test.test_name} ---")
+    print(f"--- Applying Fix for test: {current_test['test_name']} ---")
     
     # Write the fixed content to the file locally
-    with open(current_test.file_path, "w") as f:
-        f.write(current_test.proposed_fix)
-    print(f"Successfully wrote fix locally to {current_test.file_path}")
+    with open(current_test['file_path'], "w") as f:
+        f.write(current_test['proposed_fix'])
+    print(f"Successfully wrote fix locally to {current_test['file_path']}")
     
     # Sync fix to GitHub repository if GITHUB_TOKEN environment variable is set
     github_token = os.getenv("GITHUB_TOKEN")
@@ -456,7 +469,7 @@ async def self_healing(state: GraphState) -> Command:
         repo = os.getenv("GITHUB_REPO", "agenthack-test-agent")
         branch = os.getenv("GITHUB_BRANCH", "main")
         
-        ok = await update_github_file(owner, repo, current_test.file_path, current_test.proposed_fix, github_token, branch)
+        ok = await update_github_file(owner, repo, current_test['file_path'], current_test['proposed_fix'], github_token, branch)
         if ok:
             print("Successfully pushed healed code to GitHub!")
         else:
@@ -464,7 +477,7 @@ async def self_healing(state: GraphState) -> Command:
     
     # Re-run the tests to verify
     print("Verifying the fix by re-running pytest...")
-    cmd = [".venv/bin/pytest", current_test.file_path]
+    cmd = [".venv/bin/pytest", current_test['file_path']]
     result = subprocess.run(cmd, capture_output=True, text=True)
     
     status = "failed_to_heal"
@@ -475,16 +488,16 @@ async def self_healing(state: GraphState) -> Command:
         explanation = "🟢 Fix applied successfully and verified! All tests passed."
         print(explanation)
         if state.slack_channel:
-            await post_to_slack(state.slack_channel, f"🟢 *Self-Healing Successful!* Test `{current_test.test_name}` is now passing.")
+            await post_to_slack(state.slack_channel, f"🟢 *Self-Healing Successful!* Test `{current_test['test_name']}` is now passing.")
     else:
         print("Verification failed. Tests still failing.")
         if state.slack_channel:
-            await post_to_slack(state.slack_channel, f"🔴 *Self-Healing Failed!* Test `{current_test.test_name}` is still failing after applying fix.")
+            await post_to_slack(state.slack_channel, f"🔴 *Self-Healing Failed!* Test `{current_test['test_name']}` is still failing after applying fix.")
             
     return Command(update={
         "status": status,
         "explanation": explanation,
-        "applied_fix": current_test.proposed_fix
+        "applied_fix": current_test['proposed_fix']
     })
 
 # Helper router function

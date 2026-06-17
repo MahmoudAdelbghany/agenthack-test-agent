@@ -8,13 +8,6 @@ on:
 jobs:
   test-and-heal:
     runs-on: ubuntu-latest
-    env:
-      UIPATH_CLI_ENABLE_ENV_AUTH: "true"
-      UIPATH_CLI_AUTH_TOKEN: "${{ secrets.UIPATH_CLI_AUTH_TOKEN }}"
-      UIPATH_ACCESS_TOKEN: "${{ secrets.UIPATH_CLI_AUTH_TOKEN }}"
-      UIPATH_URL: "https://cloud.uipath.com"
-      UIPATH_ORGANIZATION_NAME: "${{ secrets.UIPATH_ORGANIZATION }}"
-      UIPATH_TENANT_NAME: "${{ secrets.UIPATH_TENANT }}"
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
@@ -32,6 +25,15 @@ jobs:
     - name: Install UiPath CLI
       run: npm install -g @uipath/cli
 
+    - name: Login to UiPath
+      run: |
+        uip login \
+          --client-id "${{ secrets.UIPATH_CLIENT_ID }}" \
+          --client-secret "${{ secrets.UIPATH_CLIENT_SECRET }}" \
+          --organization "${{ secrets.UIPATH_ORGANIZATION }}" \
+          --tenant "${{ secrets.UIPATH_TENANT }}" \
+          --output json
+
     - name: Configure Python Environment and UiPath Coded Agent
       run: |
         python -m venv .venv
@@ -47,3 +49,4 @@ jobs:
           --project-key "${{ secrets.UIPATH_PROJECT_KEY }}" \
           --test-set-key "${{ secrets.UIPATH_TEST_SET_KEY }}" \
           --slack-channel "new-channel"
+
