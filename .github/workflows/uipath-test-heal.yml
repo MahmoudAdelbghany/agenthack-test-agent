@@ -48,5 +48,8 @@ jobs:
         python ci_run.py \
           --project-key "${{ secrets.UIPATH_PROJECT_KEY }}" \
           --test-set-key "${{ secrets.UIPATH_TEST_SET_KEY }}" \
-          --slack-channel "new-channel"
+          --slack-channel "new-channel" \
+          --process-key "${{ secrets.UIPATH_PROCESS_KEY }}" \
+          --folder-key "${{ secrets.UIPATH_FOLDER_KEY }}" \
+          --auto-approve
 

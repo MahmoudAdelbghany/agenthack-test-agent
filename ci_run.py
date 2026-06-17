@@ -3,26 +3,42 @@ import sys
 import subprocess
 import json
 import argparse
+import time
 
-def run_command(cmd):
+def run_command(cmd, check=True):
     """Helper to run a system command and parse JSON output."""
     result = subprocess.run(cmd, capture_output=True, text=True)
-    if result.returncode != 0:
+    if check and result.returncode != 0:
         print(f"Command {' '.join(cmd)} failed with exit code {result.returncode}:")
-        print(result.stderr)
-        raise RuntimeError(result.stderr or f"Exit code {result.returncode}")
+        print(result.stderr or result.stdout)
+        raise RuntimeError(result.stderr or result.stdout or f"Exit code {result.returncode}")
     try:
-        return json.loads(result.stdout)
+        return json.loads(result.stdout) if result.stdout.strip() else {}
     except json.JSONDecodeError as e:
         print(f"Error parsing JSON output from command {' '.join(cmd)}:")
         print(result.stdout)
         raise e
+
+def wait_for_job(job_key, timeout=600, poll_interval=10):
+    """Poll a job until it reaches a terminal or suspended state."""
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        job = run_command(["uip", "or", "jobs", "get", job_key, "--output", "json"])
+        state = job.get("Data", {}).get("State", "")
+        print(f"Job {job_key} state: {state}")
+        if state in {"Successful", "Faulted", "Stopped", "Suspended"}:
+            return job
+        time.sleep(poll_interval)
+    raise TimeoutError(f"Job {job_key} did not finish within {timeout}s")
 
 def main():
     parser = argparse.ArgumentParser(description="UiPath CI/CD Test Cloud & Self-Healing Orchestrator")
     parser.add_argument("--project-key", required=True, help="UiPath Test Manager Project Key (e.g. DEMO)")
     parser.add_argument("--test-set-key", required=True, help="Test Set Key to run (e.g. DEMO:12)")
     parser.add_argument("--slack-channel", required=True, help="Slack channel to send alerts to")
+    parser.add_argument("--process-key", required=True, help="Orchestrator process key for the deployed coded agent")
+    parser.add_argument("--folder-key", required=True, help="Orchestrator folder key where the agent is published")
+    parser.add_argument("--auto-approve", action="store_true", help="Auto-resume suspended jobs with approval (for CI demo)")
     args = parser.parse_args()
 
     print(f"--- 1. Triggering Test Cloud Run for Set: {args.test_set_key} ---")
@@ -82,23 +98,50 @@ def main():
             "slack_channel": args.slack_channel
         }
         
-        invoke_cmd = [
-            "uip", "codedagent", "invoke", "agent",
-            json.dumps(agent_input)
+        start_cmd = [
+            "uip", "or", "jobs", "start", args.process_key,
+            "--folder-key", args.folder_key,
+            "--input-arguments", json.dumps(agent_input),
+            "--output", "json",
         ]
-        
-        print(f"Invoking deployed agent with input: {json.dumps(agent_input)}")
-        invoke_result = subprocess.run(invoke_cmd, capture_output=True, text=True)
-        
-        if invoke_result.returncode == 0:
-            print("Self-healing agent successfully triggered in Orchestrator!")
-            print("Check your Slack channel for failure alerts and the interactive approval buttons.")
-            print(invoke_result.stdout)
-        else:
-            print("Error triggering self-healing agent:")
-            print("STDOUT:", invoke_result.stdout)
-            print("STDERR:", invoke_result.stderr)
+
+        print(f"Starting self-healing agent job with input: {json.dumps(agent_input)}")
+        start_result = run_command(start_cmd)
+        jobs = start_result.get("Data", {}).get("Jobs", [])
+        if not jobs:
+            print("Error: no job returned from Orchestrator.")
             sys.exit(1)
+
+        job_key = jobs[0]["Key"]
+        print(f"Self-healing agent job started: {job_key}")
+
+        if args.auto_approve:
+            print("Waiting for agent to reach approval checkpoint...")
+            job = wait_for_job(job_key)
+            state = job.get("Data", {}).get("State", "")
+            if state == "Suspended":
+                print("Job suspended for approval. Auto-resuming with approved=true...")
+                run_command([
+                    "uip", "or", "jobs", "resume", job_key,
+                    "--input-arguments", json.dumps({"approved": True}),
+                    "--output", "json",
+                ])
+                job = wait_for_job(job_key)
+                state = job.get("Data", {}).get("State", "")
+
+            if state == "Successful":
+                output = job.get("Data", {}).get("OutputArguments", "")
+                print("Self-healing completed successfully!")
+                if output:
+                    print(f"Job output: {output}")
+            else:
+                info = job.get("Data", {}).get("Info", "")
+                print(f"Self-healing job finished with state: {state}")
+                if info:
+                    print(info)
+                sys.exit(1)
+        else:
+            print("Check your Slack channel for failure alerts and the interactive approval buttons.")
     else:
         print("\n🟢 All tests passed successfully! No self-healing needed.")
 
