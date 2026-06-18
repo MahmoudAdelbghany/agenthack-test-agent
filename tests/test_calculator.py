@@ -1,6 +1,6 @@
 ""
 def add(a, b):
-    # Corrected function to perform addition
+    # Fix: returns addition instead of multiplication
     return a + b
 
 def test_add():
