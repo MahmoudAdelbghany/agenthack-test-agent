@@ -1,5 +1,6 @@
 ""
 def add(a, b):
+    # Corrected implementation
     return a + b
 
 def test_add():
