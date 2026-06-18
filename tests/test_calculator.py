@@ -1,7 +1,8 @@
 ""
-def addition(a, b):
+def add(a, b):
+    # Fix: returns the sum of a and b
     return a + b
 
 def test_add():
-    assert addition(2, 3) == 5
+    assert add(2, 3) == 5
 ""
