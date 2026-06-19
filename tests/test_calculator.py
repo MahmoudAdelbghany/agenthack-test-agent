@@ -1,5 +1,5 @@
 def add(a, b):
-    # BUG: broken in this PR - multiplication instead of addition
+    # BUG: broken again for new test - multiplication instead of addition
     return a * b
 
 def test_add():
