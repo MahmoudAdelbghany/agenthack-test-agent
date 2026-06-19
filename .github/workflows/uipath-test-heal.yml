@@ -3,11 +3,18 @@ name: UiPath Test & Self-Heal Pipeline
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    types: [opened, synchronize, reopened]
   workflow_dispatch:
 
 jobs:
   test-and-heal:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: read
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
@@ -51,5 +58,11 @@ jobs:
           --slack-channel "new-channel" \
           --process-key "${{ secrets.UIPATH_PROCESS_KEY }}" \
           --folder-key "${{ secrets.UIPATH_FOLDER_KEY }}" \
-          --auto-approve
+          # --auto-approve intentionally omitted for this demo so the agent suspends for human approval in Slack / loop
+
+          --head-branch "${{ github.head_ref || github.ref_name }}" \
+          --pr-number "${{ github.event.pull_request.number || '' }}" \
+          --repo "${{ github.repository }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN || github.token }}
 

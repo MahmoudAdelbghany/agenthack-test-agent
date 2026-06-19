@@ -39,12 +39,16 @@ def main():
     parser.add_argument("--process-key", required=True, help="Orchestrator process key for the deployed coded agent")
     parser.add_argument("--folder-key", required=True, help="Orchestrator folder key where the agent is published")
     parser.add_argument("--auto-approve", action="store_true", help="Auto-resume suspended jobs with approval (for CI demo)")
+    parser.add_argument("--head-branch", default=None, help="Git branch to target for fixes (PR head or main)")
+    parser.add_argument("--pr-number", default=None, help="GitHub PR number if triggered from pull_request")
+    parser.add_argument("--repo", default=None, help="GitHub repo owner/name")
     args = parser.parse_args()
 
     print(f"--- 1. Triggering Test Cloud Run for Set: {args.test_set_key} ---")
     run_cmd = [
         "uip", "tm", "testsets", "run",
         "--test-set-key", args.test_set_key,
+        "--execution-type", "manual",
         "--output", "json"
     ]
     run_result = None
@@ -95,7 +99,10 @@ def main():
         agent_input = {
             "execution_id": execution_id,
             "project_key": args.project_key,
-            "slack_channel": args.slack_channel
+            "slack_channel": args.slack_channel,
+            "head_branch": args.head_branch,
+            "pr_number": args.pr_number,
+            "repo": args.repo
         }
         
         start_cmd = [
