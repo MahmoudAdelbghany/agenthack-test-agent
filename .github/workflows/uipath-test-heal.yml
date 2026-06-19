@@ -57,8 +57,7 @@ jobs:
           --test-set-key "${{ secrets.UIPATH_TEST_SET_KEY }}" \
           --slack-channel "new-channel" \
           --process-key "${{ secrets.UIPATH_PROCESS_KEY }}" \
-          --folder-key "${{ secrets.UIPATH_FOLDER_KEY }}" \
-          # --auto-approve intentionally omitted for this demo so the agent suspends for human approval in Slack / loop
+          --folder-key "${{ secrets.UIPATH_FOLDER_KEY }}"
 
           --head-branch "${{ github.head_ref || github.ref_name }}" \
           --pr-number "${{ github.event.pull_request.number || '' }}" \
