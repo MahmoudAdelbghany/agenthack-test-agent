@@ -409,6 +409,31 @@ async def slack_notification(state: GraphState) -> Command:
                         "type": "mrkdwn",
                         "text": msg
                     }
+                },
+                {
+                    "type": "actions",
+                    "elements": [
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "✅ Yes, implement the fix"
+                            },
+                            "style": "primary",
+                            "value": state.execution_id,
+                            "action_id": "approve_fix"
+                        },
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "❌ No, skip"
+                            },
+                            "style": "danger",
+                            "value": "skip",
+                            "action_id": "reject_fix"
+                        }
+                    ]
                 }
             ]
         }
