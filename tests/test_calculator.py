@@ -1,7 +1,7 @@
 ""
 def add(a, b):
-    # Fix: returns the sum of its arguments
-    return a + b
+    # Break again: return 0
+    return 0
 
 def test_add():
     assert add(2, 3) == 5
