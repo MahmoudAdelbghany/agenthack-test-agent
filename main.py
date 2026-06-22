@@ -155,7 +155,7 @@ async def call_cloudflare_ai_json(prompt: str, system_prompt: str) -> dict:
 async def post_to_slack(channel: str, message: str, attachment: dict = None) -> bool:
     sdk = UiPath()
     try:
-        slack_connection_id = "804fed11-8981-4c81-bf05-d582e8241dc7"
+        slack_connection_id = "ad204f94-960f-42ea-afac-05e6889bf3b6"
         try:
             slack_conn = sdk.connections.retrieve(slack_connection_id)
         except Exception as e_id:
@@ -389,9 +389,11 @@ async def slack_notification(state: GraphState) -> Command:
             "status": "approval_processed"
         })
     
+    exec_id_display = state.execution_id or "unknown"
     msg = f"🚨 *Test Failure Alert*\n" \
           f"*Test Case:* `{current_test['test_name']}` in `{current_test['file_path']}`\n" \
           f"*Root Cause:* {current_test['explanation']}\n\n" \
+          f"EXEC_ID: {exec_id_display}\n\n" \
           f"I suggest applying the fix. Would you like me to do it?"
           
     print("\n=================== SLACK NOTIFICATION PENDING ===================")
@@ -401,6 +403,8 @@ async def slack_notification(state: GraphState) -> Command:
     # Attempt to post to Slack via Integration Service if configured
     if state.slack_channel:
         # Construct Slack Block Kit attachments
+        # The button value MUST carry the execution_id for the responder to find the suspended job
+        approve_value = f"EXEC_ID: {exec_id_display}"
         blocks = {
             "blocks": [
                 {
@@ -409,6 +413,31 @@ async def slack_notification(state: GraphState) -> Command:
                         "type": "mrkdwn",
                         "text": msg
                     }
+                },
+                {
+                    "type": "actions",
+                    "elements": [
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "✅ Yes, implement the fix"
+                            },
+                            "style": "primary",
+                            "value": approve_value,
+                            "action_id": "approve_fix"
+                        },
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "❌ No, skip"
+                            },
+                            "style": "danger",
+                            "value": f"EXEC_ID: {exec_id_display}",
+                            "action_id": "reject_fix"
+                        }
+                    ]
                 }
             ]
         }
