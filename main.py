@@ -281,43 +281,61 @@ async def fetch_failures(state: GraphState) -> Command:
  
     if is_mock or not failed_tests:
         print("Running local mock test suite to capture failures...")
-        # Reset the test file to its buggy state to ensure idempotency and testability
-        buggy_code = """def add(a, b):
-    # Bug: returns multiplication instead of addition
-    return a * b
-
-def test_add():
-    assert add(2, 3) == 5
-"""
-        os.makedirs("tests", exist_ok=True)
-        with open("tests/test_calculator.py", "w") as f:
-            f.write(buggy_code)
 
         # Run pytest on the local calculator test and capture the failure
-        cmd = [".venv/bin/pytest", "--tb=short", "tests/test_calculator.py"]
+        cmd = [".venv/bin/pytest", "--tb=long", "tests/test_calculator.py"]
         result = subprocess.run(cmd, capture_output=True, text=True)
         
-        # Parse output for AssertionError: assert 6 == 5
-        output = result.stdout
+        output = result.stdout + "\n" + result.stderr
         print(output)
         
-        # Simple parser for the pytest traceback
-        error_match = re.search(r"E\s+AssertionError: (.*)", output)
-        error_msg = error_match.group(1) if error_match else "Assertion failed"
+        # Parse traceback to find the SOURCE file (not the test file)
+        # Pattern: "File \"src/calculator.py\", line N, in add" followed by the buggy code
+        source_file = None
+        source_line = None
         
-        line_match = re.search(r"tests/test_calculator.py:(\d+): AssertionError", output)
-        line_num = int(line_match.group(1)) if line_match else 6
+        # Find all files mentioned in the traceback
+        files_in_trace = re.findall(r'File "([^"]+\.py)", line (\d+)', output)
+        print(f"[TRACEBACK] Files found in traceback: {files_in_trace}")
+        
+        for fpath, lineno in files_in_trace:
+            # Skip test files and framework files - we want the source code
+            if "test_" not in fpath and "conftest" not in fpath and ".venv" not in fpath:
+                source_file = fpath
+                source_line = int(lineno)
+                break
+        
+        if not source_file:
+            # Fallback: try to find src/ files
+            import glob
+            src_files = glob.glob("src/**/*.py", recursive=True)
+            if src_files:
+                source_file = src_files[0]
+                source_line = 1
+        
+        if not source_file:
+            source_file = "tests/test_calculator.py"
+            source_line = 1
+        
+        print(f"[TRACEBACK] Source file to fix: {source_file}:{source_line}")
         
         code_context = ""
-        file_path = "tests/test_calculator.py"
-        if os.path.exists(file_path):
-            with open(file_path, "r") as f:
+        if os.path.exists(source_file):
+            with open(source_file, "r") as f:
                 code_context = f.read()
+        
+        # Extract error message
+        error_match = re.search(r"E\s+(\w+Error: .*)", output)
+        error_msg = error_match.group(1) if error_match else "Test failed"
+        
+        # Extract test name
+        test_match = re.search(r"FAILED tests/\S+::(\w+)", output)
+        test_name = test_match.group(1) if test_match else "unknown"
                 
         failed_tests.append({
-            "test_name": "test_add",
-            "file_path": file_path,
-            "line_number": line_num,
+            "test_name": test_name,
+            "file_path": source_file,
+            "line_number": source_line,
             "error_message": error_msg,
             "traceback": output,
             "code_context": code_context,
@@ -338,19 +356,20 @@ async def diagnose_failures(state: GraphState) -> Command:
     print("--- Diagnosing Failures via Cloudflare Workers AI ---")
     current_test = state.failed_tests[state.current_test_index]
     
-    prompt = f"""We have a failing test case in our test suite.
-Test File: {current_test['file_path']}
+    prompt = f"""A test is failing because the SOURCE CODE has a bug.
+Source File: {current_test['file_path']}
 Test Name: {current_test['test_name']}
 Error message: {current_test['error_message']}
 Traceback:
 {current_test['traceback']}
 
-Here is the full content of the test file:
+Here is the full content of the SOURCE file (the code with the bug):
 ```python
 {current_test['code_context']}
 ```
 
-Identify the bug, describe the cause, and return the modified file contents to fix the issue.
+The test is CORRECT. The source code has a bug. Fix the SOURCE code, not the test.
+Identify the bug in the source code, describe the cause, and return the modified source file contents to fix the issue.
 """
 
     system_prompt = """You are a self-healing coding assistant. Analyze the failure and provide a fix.
