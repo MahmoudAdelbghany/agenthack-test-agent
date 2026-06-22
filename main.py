@@ -49,12 +49,14 @@ class GraphInput(BaseModel):
     slack_channel: Optional[str] = Field(default=None, description="Slack channel to notify")
     repo_path: Optional[str] = Field(default=".", description="Path to the repository to run tests in")
     approved: Optional[bool] = Field(default=None, description="Whether the fix is approved (used for resume/bypass)")
+    branch: Optional[str] = Field(default=None, description="Git branch to push the fix to (defaults to main)")
 
 class GraphState(BaseModel):
     execution_id: str
     project_key: Optional[str] = None
     slack_channel: Optional[str] = None
     repo_path: str = "."
+    branch: Optional[str] = None
     failed_tests: List[dict] = []
     current_test_index: int = 0
     approved: Optional[bool] = None
@@ -515,7 +517,7 @@ async def self_healing(state: GraphState) -> Command:
         print("GITHUB_TOKEN detected. Syncing fix to GitHub repository...")
         owner = os.getenv("GITHUB_OWNER", "MahmoudAdelbghany")
         repo = os.getenv("GITHUB_REPO", "agenthack-test-agent")
-        branch = os.getenv("GITHUB_BRANCH", "main")
+        branch = state.branch or os.getenv("GITHUB_BRANCH", "main")
         
         ok = await update_github_file(owner, repo, current_test['file_path'], current_test['proposed_fix'], github_token, branch)
         if ok:
@@ -523,9 +525,9 @@ async def self_healing(state: GraphState) -> Command:
         else:
             print("Warning: Failed to sync code to GitHub.")
     
-    # Re-run the tests to verify
+    # Re-run the tests to verify (always run the test file, not the source file)
     print("Verifying the fix by re-running pytest...")
-    cmd = [".venv/bin/pytest", current_test['file_path']]
+    cmd = [".venv/bin/pytest", "tests/test_calculator.py", "-v"]
     result = subprocess.run(cmd, capture_output=True, text=True)
     
     status = "failed_to_heal"
