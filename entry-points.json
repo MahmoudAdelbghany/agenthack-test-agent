@@ -1,0 +1,142 @@
+{
+    "$schema": "https://cloud.uipath.com/draft/2024-12/entry-point",
+    "$id": "entry-points.json",
+    "entryPoints": [
+        {
+            "filePath": "agent",
+            "uniqueId": "22433f74-63e8-4663-9241-746bbe266939",
+            "type": "agent",
+            "input": {
+                "type": "object",
+                "properties": {
+                    "execution_id": {
+                        "default": "mock",
+                        "description": "The UiPath Test Manager Execution ID, or 'mock' to run local self-healing tests",
+                        "title": "Execution Id",
+                        "type": "string"
+                    },
+                    "project_key": {
+                        "type": "string"
+                    },
+                    "slack_channel": {
+                        "type": "string"
+                    },
+                    "repo_path": {
+                        "type": "string"
+                    },
+                    "approved": {
+                        "type": "boolean"
+                    },
+                    "branch": {
+                        "type": "string",
+                        "description": "Git branch to push the fix to (defaults to main)"
+                    }
+                },
+                "required": []
+            },
+            "output": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "title": "Status",
+                        "type": "string"
+                    },
+                    "explanation": {
+                        "title": "Explanation",
+                        "type": "string"
+                    },
+                    "applied_fix": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "status",
+                    "explanation"
+                ]
+            },
+            "graph": {
+                "nodes": [
+                    {
+                        "id": "__start__",
+                        "name": "__start__",
+                        "type": "__start__",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "fetch_failures",
+                        "name": "fetch_failures",
+                        "type": "node",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "diagnose_failures",
+                        "name": "diagnose_failures",
+                        "type": "node",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "slack_notification",
+                        "name": "slack_notification",
+                        "type": "node",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "self_healing",
+                        "name": "self_healing",
+                        "type": "node",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "__end__",
+                        "name": "__end__",
+                        "type": "__end__",
+                        "subgraph": null,
+                        "metadata": {}
+                    }
+                ],
+                "edges": [
+                    {
+                        "source": "__start__",
+                        "target": "fetch_failures",
+                        "label": null
+                    },
+                    {
+                        "source": "diagnose_failures",
+                        "target": "__end__",
+                        "label": null
+                    },
+                    {
+                        "source": "diagnose_failures",
+                        "target": "slack_notification",
+                        "label": null
+                    },
+                    {
+                        "source": "fetch_failures",
+                        "target": "diagnose_failures",
+                        "label": null
+                    },
+                    {
+                        "source": "slack_notification",
+                        "target": "__end__",
+                        "label": null
+                    },
+                    {
+                        "source": "slack_notification",
+                        "target": "self_healing",
+                        "label": null
+                    },
+                    {
+                        "source": "self_healing",
+                        "target": "__end__",
+                        "label": null
+                    }
+                ]
+            }
+        }
+    ]
+}
