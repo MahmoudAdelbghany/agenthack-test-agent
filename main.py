@@ -164,21 +164,15 @@ async def post_to_slack(channel: str, message: str, attachment: dict = None) -> 
             print(f"[Slack Notification] Warning: failed to retrieve connection by ID: {e_id}. Falling back to name lookup.")
             slack_conn = sdk.connections.retrieve("slack-triage")
         
-        # If blocks are provided, send ONLY blocks (no separate text message)
-        # Sending both messageToSend AND attachment causes duplicate messages in Slack
-        activity_input = {
-            "channel": channel,
-            "send_as": "bot"
-        }
-        if attachment:
-            activity_input["attachment"] = attachment
-        else:
-            activity_input["messageToSend"] = message
-            
         sdk.connections.invoke_activity(
             activity_metadata=SLACK_SEND_MESSAGE,
             connection_id=slack_conn.id,
-            activity_input=activity_input
+            activity_input={
+                "channel": channel,
+                "messageToSend": message,
+                "attachment": attachment,
+                "send_as": "bot"
+            }
         )
         return True
     except Exception as e:
