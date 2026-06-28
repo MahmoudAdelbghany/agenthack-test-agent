@@ -6,11 +6,45 @@
 [![Track 3 - Test Cloud](https://img.shields.io/badge/Track%203-UiPath%20Test%20Cloud-green)](https://uipath-agenthack.devpost.com/details/tracks)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## What it does
+## Project Description
 
-A developer pushes code → tests run → one fails → the agent diagnoses the bug → sends a Slack alert → waits for human approval → fixes the code → pushes to GitHub → tests pass.
+The Self-Healing Test Agent is a coded agent built on the UiPath Platform that automates the entire test lifecycle — from test generation to failure diagnosis to code fix — while keeping humans in the loop at critical decision points.
 
-**Zero manual intervention. One human click.**
+**The Problem:** When tests fail, developers manually read logs, diagnose root causes, write fixes, and push changes. This process is slow, error-prone, and happens at the worst times (3 AM production failures).
+
+**The Solution:** An autonomous agent that:
+1. Fetches test cases from UiPath Test Manager
+2. Uses AI to analyze code and generate executable tests
+3. Runs tests in UiPath Test Cloud
+4. Diagnoses failures with Cloudflare Workers AI
+5. Sends Slack notifications with approve/reject buttons
+6. Applies fixes and pushes to GitHub upon human approval
+7. Re-runs tests to verify the fix
+
+**One `git push` triggers the entire flow. One human click completes it.**
+
+## Agent Type
+
+> **This solution uses Coded Agents.**
+>
+> The entire agent is built as a Python coded agent using LangGraph (14 nodes, 17 edges) and the UiPath Python SDK. It was developed using **MiMo** (an AI coding agent) through UiPath for Coding Agents, demonstrating the power of coding agents for enterprise automation development.
+
+## UiPath Components Used
+
+| Component | Usage |
+|-----------|-------|
+| **UiPath Test Manager** | Test case management, test sets, execution tracking |
+| **UiPath Test Cloud** | Test execution runtime |
+| **UiPath Orchestrator** | Coded agent deployment, job management, suspension/resume |
+| **UiPath Integration Service** | Slack connection with interactive button triggers |
+| **UiPath Python SDK** | Test Manager API, Orchestrator API, Integration Service API |
+| **UiPath CLI (`uip`)** | Test Manager operations, coded agent setup |
+| **UiPath for Coding Agents** | Built with MiMo (AI coding agent) |
+
+**External services:**
+- Cloudflare Workers AI (Llama 3.1 8B) — Root cause diagnosis
+- Slack — Human-in-the-loop approval notifications
+- GitHub — Code hosting, CI/CD via GitHub Actions
 
 ## Architecture
 
@@ -98,19 +132,6 @@ graph LR
     style AllPassed fill:#2a9d8f,color:#fff
 ```
 
-## Tech Stack
-
-| Component | Technology |
-|-----------|-----------|
-| Orchestration | LangGraph (14 nodes, 17 edges) |
-| Test Management | UiPath Test Manager |
-| Test Execution | UiPath Test Cloud |
-| AI Diagnosis | Cloudflare Workers AI (Llama 3.1 8B) |
-| Notifications | UiPath Integration Service → Slack |
-| CI/CD | GitHub Actions |
-| Code Push | GitHub API |
-| Agent SDK | UiPath Python SDK |
-
 ## Project Structure
 
 ```
@@ -137,96 +158,105 @@ agenthack-test-agent/
 └── AGENTS.md                  # Documentation index
 ```
 
-## Key Components
-
-### 1. Unified Graph (`main.py`)
-
-The agent is a single LangGraph state machine that chains test generation → execution → self-healing. Entry point: `main.py:graph`.
-
-```python
-from main import graph
-
-result = await graph.ainvoke({
-    "developer_code": CODE,
-    "project_key": "CALC",
-    "test_set_key": "CALC:80",
-    "slack_channel": "new-channel",
-    "branch": "main"
-})
-```
-
-### 2. Test Generator (`test_generator/nodes.py`)
-
-- **`_get_test_cases`** — Fetches from UiPath Test Manager
-- **`_get_test_steps`** — Reads test case descriptions
-- **`_parse_steps_from_description`** — Extracts steps from numbered lists
-- **`_call_ai`** — Cloudflare Workers AI for analysis
-
-### 3. Approval Responder (`approval-responder/main.py`)
-
-Handles Slack button clicks and resumes the suspended agent job via `sdk.jobs.resume(inbox_id=..., payload=...)`.
-
-### 4. CI Pipeline (`.github/workflows/uipath-test-heal.yml`)
-
-Triggers on `push to main`. Runs `ci_run.py` which orchestrates Test Cloud execution and agent invocation.
-
-## Getting Started
+## Setup Instructions
 
 ### Prerequisites
 
 - Python 3.12+
-- UiPath Automation Cloud account
+- UiPath Automation Cloud account with:
+  - Test Manager project (CALC)
+  - Test set (CALC:80)
+  - Orchestrator folder
+  - Integration Service Slack connection
 - Cloudflare Workers AI API key
-- Slack workspace with UiPath Integration Service
+- Slack workspace with UiPath app installed
+- GitHub personal access token
 
-### Setup
+### Step 1: Clone and Install
 
 ```bash
-# Clone
 git clone https://github.com/MahmoudAdelbghany/agenthack-test-agent.git
 cd agenthack-test-agent
 
-# Install
 python -m venv .venv
 source .venv/bin/activate
 pip install uv && uv sync
+```
 
-# Configure
-cp .env.example .env
-# Fill in UIPATH_ACCESS_TOKEN, CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_API_TOKEN
+### Step 2: Configure Environment
 
-# Setup UiPath coded agent
+Create `.env` file:
+
+```env
+UIPATH_ACCESS_TOKEN=your_token_here
+UIPATH_PROJECT_KEY=CALC
+UIPATH_TEST_SET_KEY=CALC:80
+UIPATH_FOLDER_KEY=your_folder_key
+UIPATH_ORGANIZATION=your_org
+UIPATH_TENANT=your_tenant
+CLOUDFLARE_ACCOUNT_ID=your_account_id
+CLOUDFLARE_API_TOKEN=your_api_token
+GITHUB_TOKEN=your_github_token
+SLACK_CHANNEL=new-channel
+```
+
+### Step 3: Setup UiPath Coded Agent
+
+```bash
 uip codedagent setup
 ```
 
-### Run Demo
+### Step 4: Run Demo (Local)
 
 ```bash
 python demo.py
 ```
 
-### Run CI Pipeline
+This runs the agent locally. Check Slack for the approval notification.
+
+### Step 5: Deploy to UiPath Automation Cloud
 
 ```bash
-python ci_run.py \
-  --project-key CALC \
-  --test-set-key CALC:80 \
-  --slack-channel new-channel \
-  --process-key <YOUR_PROCESS_KEY> \
-  --folder-key <YOUR_FOLDER_KEY> \
-  --auto-approve
+uip codedagent deploy
 ```
+
+### Step 6: Enable CI Pipeline
+
+```bash
+gh workflow enable "UiPath Test & Self-Heal Pipeline" --repo MahmoudAdelbghany/agenthack-test-agent
+```
+
+### Step 7: Trigger the Flow
+
+```bash
+# Push broken code to trigger CI
+git add src/calculator.py
+git commit -m "feat: add calculator functions"
+git push origin main
+```
+
+The CI pipeline will:
+1. Run tests in UiPath Test Cloud
+2. Detect the failure
+3. Trigger the self-healing agent
+4. Send Slack notification
+5. Wait for your approval
+6. Apply fix and push
 
 ## Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `UIPATH_ACCESS_TOKEN` | UiPath platform access token |
-| `UIPATH_PROJECT_KEY` | Test Manager project key (e.g., CALC) |
-| `UIPATH_TEST_SET_KEY` | Test set key (e.g., CALC:80) |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID |
-| `CLOUDFLARE_API_TOKEN` | Cloudflare API token |
-| `GITHUB_TOKEN` | GitHub personal access token |
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `UIPATH_ACCESS_TOKEN` | UiPath platform access token | Yes |
+| `UIPATH_PROJECT_KEY` | Test Manager project key | Yes |
+| `UIPATH_TEST_SET_KEY` | Test set key | Yes |
+| `UIPATH_FOLDER_KEY` | Orchestrator folder key | Yes |
+| `UIPATH_ORGANIZATION` | UiPath organization name | Yes |
+| `UIPATH_TENANT` | UiPath tenant name | Yes |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID | Yes |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare API token | Yes |
+| `GITHUB_TOKEN` | GitHub personal access token | Yes |
+| `SLACK_CHANNEL` | Slack channel name | Optional |
 
 ## License
 
