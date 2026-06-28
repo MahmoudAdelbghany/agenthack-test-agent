@@ -175,7 +175,7 @@ graph LR
         TS -->|fetch| Fetch[uip tm testcases list]
         Fetch --> Analyze[AI reads src/calculator.py]
         Analyze -->|identifies functions| Filter[Filter relevant cases]
-        Filter -->|add(), subtract()| Gen[Generate pytest files]
+        Filter -->|"add(), subtract()"| Gen[Generate pytest files]
         Gen -->|Cloudflare AI| Tests[4 executable test files]
     end
 
