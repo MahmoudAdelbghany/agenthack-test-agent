@@ -1,0 +1,21 @@
+Archive:  ../approval-responder.0.6.0.nupkg
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+      669  06-21-2026 12:05   ./package/services/metadata/core-properties/992d0e8d6aa34a1c.psmdcp
+      584  06-21-2026 12:05   [Content_Types].xml
+      282  06-21-2026 12:05   content/package-descriptor.json
+      483  06-21-2026 12:05   content/operate.json
+       45  06-21-2026 12:05   content/bindings_v2.json
+      397  06-21-2026 12:05   approval-responder.nuspec
+      492  06-21-2026 12:05   _rels/.rels
+       45  06-21-2026 12:05   content/bindings.json
+      129  06-21-2026 12:05   content/responder.mermaid
+   487970  06-21-2026 12:05   content/uv.lock
+     6041  06-21-2026 12:05   content/main.py
+      226  06-21-2026 12:05   content/uipath.json
+      383  06-21-2026 12:05   content/pyproject.toml
+     1039  06-21-2026 12:05   content/AGENTS.md
+     1901  06-21-2026 12:05   content/entry-points.json
+       10  06-21-2026 12:05   content/CLAUDE.md
+---------                     -------
+   500696                     16 files

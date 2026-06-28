@@ -1,0 +1,23 @@
+[project]
+name = "approval-responder"
+version = "1.1.2"
+description = "Approval Responder for Slack to Orchestrator Resume"
+authors = [{ name = "AgentHack Demo" }]
+requires-python = ">=3.11"
+dependencies = [
+    "uipath",
+    "langgraph",
+    "pydantic",
+]
+
+[dependency-groups]
+dev = [
+    "uipath-dev>=0.0.79",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
