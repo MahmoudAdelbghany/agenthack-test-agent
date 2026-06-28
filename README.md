@@ -13,13 +13,14 @@ The Self-Healing Test Agent is a coded agent built on the UiPath Platform that a
 **The Problem:** When tests fail, developers manually read logs, diagnose root causes, write fixes, and push changes. This process is slow, error-prone, and happens at the worst times (3 AM production failures).
 
 **The Solution:** An autonomous agent that:
-1. Fetches test cases from UiPath Test Manager
-2. Uses AI to analyze code and generate executable tests
-3. Runs tests in UiPath Test Cloud
-4. Diagnoses failures with Cloudflare Workers AI
-5. Sends Slack notifications with approve/reject buttons
-6. Applies fixes and pushes to GitHub upon human approval
-7. Re-runs tests to verify the fix
+1. **User Story → Test Cases** — Reads structured test cases from UiPath Test Manager
+2. **AI Filtering** — Reads the code, identifies relevant functions, skips unrelated tests
+3. **Test Generation** — Generates executable pytest files from test case descriptions
+4. **Test Execution** — Runs tests in UiPath Test Cloud
+5. **Diagnosis** — Identifies root cause with Cloudflare Workers AI
+6. **Human Approval** — Sends Slack notifications with approve/reject buttons
+7. **Auto-Fix** — Applies fix and pushes to GitHub upon human approval
+8. **Verification** — Re-runs tests to confirm the fix works
 
 **One `git push` triggers the entire flow. One human click completes it.**
 
@@ -143,7 +144,8 @@ agenthack-test-agent/
 │   └── calculator.py          # Buggy source (intentional a*b)
 ├── tests/
 │   └── test_calculator.py     # Test cases
-├── test_generator/
+├── test_generator/            # Integrated from FatmaMahmoudBadr/uipath-test-agent
+│   ├── __init__.py
 │   ├── nodes.py               # 5 async nodes (fetch, analyze, filter, generate, execute)
 │   ├── state.py               # TypedDict state definition
 │   └── graph.py               # Graph builder (inlined into main.py)
@@ -157,6 +159,63 @@ agenthack-test-agent/
 ├── pyproject.toml             # Python dependencies
 └── AGENTS.md                  # Documentation index
 ```
+
+## Full Pipeline: User Story → Executable Tests
+
+The complete flow from business requirement to running tests:
+
+```mermaid
+graph LR
+    subgraph "UiPath Test Manager"
+        US[📝 User Story] --> TC[📋 Test Cases]
+        TC --> TS[🗂️ Test Set<br/>CALC:80]
+    end
+
+    subgraph "Test Generator Agent"
+        TS -->|fetch| Fetch[uip tm testcases list]
+        Fetch --> Analyze[AI reads src/calculator.py]
+        Analyze -->|identifies functions| Filter[Filter relevant cases]
+        Filter -->|add(), subtract()| Gen[Generate pytest files]
+        Gen -->|Cloudflare AI| Tests[4 executable test files]
+    end
+
+    subgraph "Test Execution"
+        Tests --> Run[uip tm testsets run]
+        Run --> Results{Pass/Fail?}
+        Results -->|fail| Heal[Self-Healing Agent]
+        Results -->|pass| Done[✅ All Clear]
+    end
+
+    subgraph "Self-Healing"
+        Heal --> Diag[AI Diagnose Root Cause]
+        Diag --> Slack[Slack Alert]
+        Slack -->|human approves| Fix[Apply Fix]
+        Fix --> Push[Push to GitHub]
+        Push --> Run
+    end
+
+    style US fill:#f4a261,color:#000
+    style Filter fill:#e63946,color:#fff
+    style Gen fill:#2a9d8f,color:#fff
+    style Heal fill:#e63946,color:#fff
+    style Done fill:#2a9d8f,color:#fff
+```
+
+### How it works step by step:
+
+1. **User Story in UiPath Test Manager** — Business requirements are captured as test cases in UiPath Test Manager (e.g., "Add two positive integers: assert add(2,3) == 5")
+
+2. **Agent Fetches Test Cases** — Uses `uip tm testcases list` to get all test cases from the project (CALC), then `uip tm testcases list-steps` to read detailed steps
+
+3. **AI Filters Relevant Cases** — Cloudflare Workers AI reads the developer's code (`src/calculator.py`), identifies which functions changed (e.g., `add()`, `subtract()`), and filters out irrelevant tests (e.g., multiply, divide, modulo)
+
+4. **Generates Executable Tests** — For each relevant test case, the agent generates a real pytest file with proper assertions
+
+5. **Runs in UiPath Test Cloud** — Triggers the test set and monitors execution
+
+6. **Self-Heals on Failure** — Diagnoses root cause, sends Slack alert, waits for approval, applies fix, pushes to GitHub
+
+**External test generator:** Integrated from [FatmaMahmoudBadr/uipath-test-agent](https://github.com/FatmaMahmoudBadr/uipath-test-agent/tree/main) — the `test_generator/` package was inlined into the unified graph.
 
 ## Setup Instructions
 
