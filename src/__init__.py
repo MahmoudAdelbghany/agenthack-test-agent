@@ -1,7 +1,7 @@
 ""
-def add(a, b):
-    return a + b
+from typing import Callable
 
-def test_add():
-    assert add(2, 3) == 5
+def add(x: int, y: int) -> int:
+    """Return the sum of two numbers."""
+    return x + y
 ""
