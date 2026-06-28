@@ -1,6 +1,9 @@
 ""
-from typing import Callable
+import pytest
 
-def add(x: int, y: int) -> int:
-    return x + y
+def add(a, b):
+    return a + b
+
+def test_add():
+    assert add(2, 3) == 5
 ""
