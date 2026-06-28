@@ -1,142 +1,293 @@
 {
-    "$schema": "https://cloud.uipath.com/draft/2024-12/entry-point",
-    "$id": "entry-points.json",
-    "entryPoints": [
-        {
-            "filePath": "agent",
-            "uniqueId": "22433f74-63e8-4663-9241-746bbe266939",
-            "type": "agent",
-            "input": {
-                "type": "object",
-                "properties": {
-                    "execution_id": {
-                        "default": "mock",
-                        "description": "The UiPath Test Manager Execution ID, or 'mock' to run local self-healing tests",
-                        "title": "Execution Id",
-                        "type": "string"
-                    },
-                    "project_key": {
-                        "type": "string"
-                    },
-                    "slack_channel": {
-                        "type": "string"
-                    },
-                    "repo_path": {
-                        "type": "string"
-                    },
-                    "approved": {
-                        "type": "boolean"
-                    },
-                    "branch": {
-                        "type": "string",
-                        "description": "Git branch to push the fix to (defaults to main)"
-                    }
-                },
-                "required": []
-            },
-            "output": {
-                "type": "object",
-                "properties": {
-                    "status": {
-                        "title": "Status",
-                        "type": "string"
-                    },
-                    "explanation": {
-                        "title": "Explanation",
-                        "type": "string"
-                    },
-                    "applied_fix": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "status",
-                    "explanation"
-                ]
-            },
-            "graph": {
-                "nodes": [
-                    {
-                        "id": "__start__",
-                        "name": "__start__",
-                        "type": "__start__",
-                        "subgraph": null,
-                        "metadata": {}
-                    },
-                    {
-                        "id": "fetch_failures",
-                        "name": "fetch_failures",
-                        "type": "node",
-                        "subgraph": null,
-                        "metadata": {}
-                    },
-                    {
-                        "id": "diagnose_failures",
-                        "name": "diagnose_failures",
-                        "type": "node",
-                        "subgraph": null,
-                        "metadata": {}
-                    },
-                    {
-                        "id": "slack_notification",
-                        "name": "slack_notification",
-                        "type": "node",
-                        "subgraph": null,
-                        "metadata": {}
-                    },
-                    {
-                        "id": "self_healing",
-                        "name": "self_healing",
-                        "type": "node",
-                        "subgraph": null,
-                        "metadata": {}
-                    },
-                    {
-                        "id": "__end__",
-                        "name": "__end__",
-                        "type": "__end__",
-                        "subgraph": null,
-                        "metadata": {}
-                    }
-                ],
-                "edges": [
-                    {
-                        "source": "__start__",
-                        "target": "fetch_failures",
-                        "label": null
-                    },
-                    {
-                        "source": "diagnose_failures",
-                        "target": "__end__",
-                        "label": null
-                    },
-                    {
-                        "source": "diagnose_failures",
-                        "target": "slack_notification",
-                        "label": null
-                    },
-                    {
-                        "source": "fetch_failures",
-                        "target": "diagnose_failures",
-                        "label": null
-                    },
-                    {
-                        "source": "slack_notification",
-                        "target": "__end__",
-                        "label": null
-                    },
-                    {
-                        "source": "slack_notification",
-                        "target": "self_healing",
-                        "label": null
-                    },
-                    {
-                        "source": "self_healing",
-                        "target": "__end__",
-                        "label": null
-                    }
-                ]
-            }
-        }
-    ]
+  "entryPoints": [
+    {
+      "filePath": "agent",
+      "uniqueId": "22433f74-63e8-4663-9241-746bbe266939",
+      "type": "agent",
+      "input": {
+        "properties": {
+          "developer_code": {
+            "description": "Source code from the developer's PR",
+            "title": "Developer Code",
+            "type": "string"
+          },
+          "project_key": {
+            "description": "UiPath Test Manager project key",
+            "title": "Project Key",
+            "type": "string"
+          },
+          "test_set_key": {
+            "description": "UiPath Test Manager test set key to run",
+            "title": "Test Set Key",
+            "type": "string"
+          },
+          "slack_channel": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Slack channel for approval notifications",
+            "title": "Slack Channel"
+          },
+          "branch": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Git branch to push the fix to (defaults to main)",
+            "title": "Branch"
+          },
+          "approved": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Pre-approved flag (used for resume/bypass)",
+            "title": "Approved"
+          }
+        },
+        "required": [
+          "developer_code",
+          "project_key",
+          "test_set_key"
+        ],
+        "title": "GraphInput",
+        "type": "object"
+      },
+      "output": {
+        "properties": {
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "explanation": {
+            "title": "Explanation",
+            "type": "string"
+          },
+          "applied_fix": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Applied Fix"
+          }
+        },
+        "required": [
+          "status",
+          "explanation"
+        ],
+        "title": "GraphOutput",
+        "type": "object"
+      },
+      "graph": {
+        "nodes": [
+          {
+            "id": "__start__",
+            "name": "__start__",
+            "type": "__start__",
+            "subgraph": null,
+            "metadata": {}
+          },
+          {
+            "id": "tg_fetch_test_cases",
+            "name": "tg_fetch_test_cases",
+            "type": "node",
+            "subgraph": null,
+            "metadata": {}
+          },
+          {
+            "id": "tg_analyze_and_filter",
+            "name": "tg_analyze_and_filter",
+            "type": "node",
+            "subgraph": null,
+            "metadata": {}
+          },
+          {
+            "id": "tg_fetch_steps",
+            "name": "tg_fetch_steps",
+            "type": "node",
+            "subgraph": null,
+            "metadata": {}
+          },
+          {
+            "id": "tg_generate_tests",
+            "name": "tg_generate_tests",
+            "type": "node",
+            "subgraph": null,
+            "metadata": {}
+          },
+          {
+            "id": "tg_save_results",
+            "name": "tg_save_results",
+            "type": "node",
+            "subgraph": null,
+            "metadata": {}
+          },
+          {
+            "id": "trigger_test_execution",
+            "name": "trigger_test_execution",
+            "type": "node",
+            "subgraph": null,
+            "metadata": {}
+          },
+          {
+            "id": "wait_for_execution",
+            "name": "wait_for_execution",
+            "type": "node",
+            "subgraph": null,
+            "metadata": {}
+          },
+          {
+            "id": "sh_fetch_failures",
+            "name": "sh_fetch_failures",
+            "type": "node",
+            "subgraph": null,
+            "metadata": {}
+          },
+          {
+            "id": "sh_diagnose_failures",
+            "name": "sh_diagnose_failures",
+            "type": "node",
+            "subgraph": null,
+            "metadata": {}
+          },
+          {
+            "id": "sh_slack_notification",
+            "name": "sh_slack_notification",
+            "type": "node",
+            "subgraph": null,
+            "metadata": {}
+          },
+          {
+            "id": "sh_self_healing",
+            "name": "sh_self_healing",
+            "type": "node",
+            "subgraph": null,
+            "metadata": {}
+          },
+          {
+            "id": "all_passed",
+            "name": "all_passed",
+            "type": "node",
+            "subgraph": null,
+            "metadata": {}
+          },
+          {
+            "id": "__end__",
+            "name": "__end__",
+            "type": "__end__",
+            "subgraph": null,
+            "metadata": {}
+          }
+        ],
+        "edges": [
+          {
+            "source": "__start__",
+            "target": "tg_fetch_test_cases",
+            "label": null
+          },
+          {
+            "source": "sh_diagnose_failures",
+            "target": "all_passed",
+            "label": null
+          },
+          {
+            "source": "sh_diagnose_failures",
+            "target": "sh_slack_notification",
+            "label": null
+          },
+          {
+            "source": "sh_fetch_failures",
+            "target": "sh_diagnose_failures",
+            "label": null
+          },
+          {
+            "source": "sh_slack_notification",
+            "target": "__end__",
+            "label": null
+          },
+          {
+            "source": "sh_slack_notification",
+            "target": "sh_self_healing",
+            "label": null
+          },
+          {
+            "source": "tg_analyze_and_filter",
+            "target": "__end__",
+            "label": null
+          },
+          {
+            "source": "tg_analyze_and_filter",
+            "target": "tg_fetch_steps",
+            "label": null
+          },
+          {
+            "source": "tg_fetch_steps",
+            "target": "tg_generate_tests",
+            "label": null
+          },
+          {
+            "source": "tg_fetch_test_cases",
+            "target": "tg_analyze_and_filter",
+            "label": null
+          },
+          {
+            "source": "tg_generate_tests",
+            "target": "tg_save_results",
+            "label": null
+          },
+          {
+            "source": "tg_save_results",
+            "target": "trigger_test_execution",
+            "label": null
+          },
+          {
+            "source": "trigger_test_execution",
+            "target": "wait_for_execution",
+            "label": null
+          },
+          {
+            "source": "wait_for_execution",
+            "target": "all_passed",
+            "label": null
+          },
+          {
+            "source": "wait_for_execution",
+            "target": "sh_fetch_failures",
+            "label": null
+          },
+          {
+            "source": "all_passed",
+            "target": "__end__",
+            "label": null
+          },
+          {
+            "source": "sh_self_healing",
+            "target": "__end__",
+            "label": null
+          }
+        ]
+      }
+    }
+  ]
 }
