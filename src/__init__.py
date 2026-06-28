@@ -2,6 +2,6 @@
 from typing import Callable
 
 def add(a: int, b: int) -> int:
-    """Return the sum of two integers."""
+    """Return the sum of two numbers."""
     return a + b
 ""
